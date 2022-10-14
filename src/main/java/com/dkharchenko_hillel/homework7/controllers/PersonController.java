@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
+import com.dkharchenko_hillel.homework7.converters.PersonConverter;
 import com.dkharchenko_hillel.homework7.dtos.PersonDto;
 import com.dkharchenko_hillel.homework7.services.PersonService;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.stream.Collectors;
 
 @Controller
 public class PersonController {
@@ -30,7 +32,8 @@ public class PersonController {
 
     @RequestMapping(value = "/add_person", method = RequestMethod.POST)
     public String addPerson(@ModelAttribute("person") PersonDto personDto) {
-        personService.addPerson(personDto);
+        personService.addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getPhoneNumber(),
+                personDto.getUsername(), personDto.getPassword());
         return "redirect:/all_persons";
     }
 
@@ -43,7 +46,8 @@ public class PersonController {
 
     @GetMapping("/all_persons")
     public String getAllPersons(Model model) {
-        model.addAttribute("all", personService.getAllPersons());
+        model.addAttribute("all", personService.getAllPersons().stream()
+                .map(PersonConverter::convertPersonToPersonDto).collect(Collectors.toList()));
         return "allPersons";
     }
 
@@ -56,7 +60,8 @@ public class PersonController {
     @RequestMapping(value = "/update_first_name", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updatePersonFirstNameByUsername(@ModelAttribute("person") PersonDto personDto) {
-        personService.updatePersonFirstNameByUsername(httpServletRequest.getUserPrincipal().getName(), personDto);
+        personService.updatePersonFirstNameByUsername(httpServletRequest.getUserPrincipal().getName(),
+                personDto.getFirstName());
         return "updatePersonFirstNameSuccess";
     }
 
@@ -69,7 +74,8 @@ public class PersonController {
     @RequestMapping(value = "/update_last_name", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updatePersonLastNameByUsername(@ModelAttribute("person") PersonDto personDto) {
-        personService.updatePersonLastNameByUsername(httpServletRequest.getUserPrincipal().getName(), personDto);
+        personService.updatePersonLastNameByUsername(httpServletRequest.getUserPrincipal().getName(),
+                personDto.getLastName());
         return "updatePersonLastNameSuccess";
     }
 
@@ -82,7 +88,8 @@ public class PersonController {
     @RequestMapping(value = "/update_phone_number", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updatePersonPhoneNumberByUsername(@ModelAttribute("person") PersonDto personDto) {
-        personService.updatePersonPhoneNumberByUsername(httpServletRequest.getUserPrincipal().getName(), personDto);
+        personService.updatePersonPhoneNumberByUsername(httpServletRequest.getUserPrincipal().getName(),
+                personDto.getPhoneNumber());
         return "updatePersonPhoneNumberSuccess";
     }
 }

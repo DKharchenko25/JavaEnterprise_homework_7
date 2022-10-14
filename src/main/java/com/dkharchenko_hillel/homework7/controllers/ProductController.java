@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
+import com.dkharchenko_hillel.homework7.converters.ProductConverter;
 import com.dkharchenko_hillel.homework7.dtos.ProductDto;
 import com.dkharchenko_hillel.homework7.services.ProductService;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.stream.Collectors;
 
 @Controller
 public class ProductController {
@@ -27,7 +30,7 @@ public class ProductController {
 
     @RequestMapping(value = "/add_product", method = RequestMethod.POST)
     public String addProduct(@ModelAttribute("product") ProductDto productDto) {
-        productService.addProduct(productDto);
+        productService.addProduct(productDto.getName(), productDto.getPrice(), productDto.getShopId());
         return "addProductSuccess";
     }
 
@@ -46,7 +49,8 @@ public class ProductController {
 
     @GetMapping("/all_products")
     public String getAllProducts(Model model) {
-        model.addAttribute("all", productService.getAllProducts());
+        model.addAttribute("all", productService.getAllProducts()
+                .stream().map(ProductConverter::convertProductToProductDto).collect(Collectors.toList()));
         return "allProducts";
     }
 
@@ -59,7 +63,7 @@ public class ProductController {
     @RequestMapping(value = "/update_product_name", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updateProductNameById(@ModelAttribute("product") ProductDto productDto) {
-        productService.updateProductNameById(productDto.getId(), productDto);
+        productService.updateProductNameById(productDto.getId(), productDto.getName());
         return "updateProductNameSuccess";
     }
 
@@ -72,7 +76,7 @@ public class ProductController {
     @RequestMapping(value = "/update_price", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updateProductPriceById(@ModelAttribute("product") ProductDto productDto) {
-        productService.updateProductPriceById(productDto.getId(), productDto);
+        productService.updateProductPriceById(productDto.getId(), productDto.getPrice());
         return "updateProductPriceSuccess";
     }
 }

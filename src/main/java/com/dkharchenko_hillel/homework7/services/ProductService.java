@@ -1,20 +1,20 @@
 package com.dkharchenko_hillel.homework7.services;
 
 
-import com.dkharchenko_hillel.homework7.dtos.ProductDto;
+import com.dkharchenko_hillel.homework7.models.Product;
 
 import java.util.List;
 
 public interface ProductService {
-    Long addProduct(ProductDto dto);
+    void addProduct(String name, Double price, Long shopId);
 
-    Long removeProductById(Long id);
+    void removeProductById(Long id);
 
-    ProductDto getProductById(Long id);
+    Product getProductById(Long id);
 
-    List<ProductDto> getAllProducts();
+    List<Product> getAllProducts();
 
-    Long updateProductNameById(Long id, ProductDto dto);
+    void updateProductNameById(Long id, String name);
 
-    Long updateProductPriceById(Long id, ProductDto dto);
+    void updateProductPriceById(Long id, Double price);
 }

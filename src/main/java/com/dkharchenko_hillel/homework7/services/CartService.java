@@ -1,24 +1,24 @@
 package com.dkharchenko_hillel.homework7.services;
 
-import com.dkharchenko_hillel.homework7.dtos.CartDto;
+import com.dkharchenko_hillel.homework7.models.Cart;
 
 import java.util.List;
 
 public interface CartService {
-    Long addCartByPersonUsername(String username);
+    void addCartByPersonUsername(String username);
 
-    Long removeCartById(Long id);
+    void removeCartById(Long id);
 
-    CartDto getCartById(Long id);
+    Cart getCartById(Long id);
 
-    List<CartDto> getAllCarts();
+    List<Cart> getAllCarts();
 
-    List<CartDto> getAllPersonCarts(String username);
+    List<Cart> getAllPersonCarts(String username);
 
-    CartDto addProductByProductId(Long cartId, Long productId);
+    void addProductByProductId(Long cartId, Long productId);
 
-    CartDto removeProductByProductId(Long cartId, Long productId);
+    void removeProductByProductId(Long cartId, Long productId);
 
-    Long removeAllProductsById(Long id);
+    void removeAllProductsById(Long id);
 
 }

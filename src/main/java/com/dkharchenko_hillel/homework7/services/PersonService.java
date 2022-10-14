@@ -1,25 +1,24 @@
 package com.dkharchenko_hillel.homework7.services;
 
-import com.dkharchenko_hillel.homework7.dtos.PersonDto;
 import com.dkharchenko_hillel.homework7.models.Person;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 public interface PersonService extends UserDetailsService {
-    PersonDto addPerson(PersonDto dto);
+    Person addPerson(String firstName, String lastName, String phoneNumber, String username, String password);
 
-    PersonDto removePersonById(Long id);
+    void removePersonById(Long id);
 
     Person getPersonByUsername(String username);
 
-    PersonDto getPersonById(Long id);
+    Person getPersonById(Long id);
 
-    List<PersonDto> getAllPersons();
+    List<Person> getAllPersons();
 
-    String updatePersonFirstNameByUsername(String username, PersonDto dto);
+    void updatePersonFirstNameByUsername(String username, String firstName);
 
-    String updatePersonLastNameByUsername(String username, PersonDto dto);
+    void updatePersonLastNameByUsername(String username, String lastName);
 
-    String updatePersonPhoneNumberByUsername(String username, PersonDto dto);
+    void updatePersonPhoneNumberByUsername(String username, String phoneNumber);
 }

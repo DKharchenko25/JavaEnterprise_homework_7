@@ -1,17 +1,17 @@
 package com.dkharchenko_hillel.homework7.services;
 
-import com.dkharchenko_hillel.homework7.dtos.ShopDto;
+import com.dkharchenko_hillel.homework7.models.Shop;
 
 import java.util.List;
 
 public interface ShopService {
-    ShopDto addShop(String name);
+    void addShop(String name);
 
-    Long removeShopById(Long id);
+    void removeShopById(Long id);
 
-    ShopDto getShopById(Long id);
+    Shop getShopById(Long id);
 
-    List<ShopDto> getAllShops();
+    List<Shop> getAllShops();
 
-    Long updateShopNameById(Long id, String name);
+    void updateShopNameById(Long id, String name);
 }

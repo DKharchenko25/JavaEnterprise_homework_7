@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
+import com.dkharchenko_hillel.homework7.converters.ShopConverter;
 import com.dkharchenko_hillel.homework7.dtos.ShopDto;
 import com.dkharchenko_hillel.homework7.services.ShopService;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.stream.Collectors;
 
 @Controller
 public class ShopController {
@@ -47,7 +50,8 @@ public class ShopController {
 
     @GetMapping("/all_shops")
     public String getAllShops(Model model) {
-        model.addAttribute("all", shopService.getAllShops());
+        model.addAttribute("all", shopService.getAllShops().stream()
+                .map(ShopConverter::convertShopToShopDto).collect(Collectors.toList()));
         return "allShops";
     }
 
