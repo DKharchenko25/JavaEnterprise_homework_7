@@ -1,5 +1,7 @@
 # Online Shop
 
+### Path: ```localhost:8080```
+
 ### Test logins and passwords for access:
 
 1. Admin account:
