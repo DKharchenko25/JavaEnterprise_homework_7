@@ -3,10 +3,12 @@ package com.dkharchenko_hillel.homework7.services;
 import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Product;
 import com.dkharchenko_hillel.homework7.reposiroties.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
@@ -34,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
             try {
                 throw new NotFoundException("Product with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -47,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
             try {
                 throw new NotFoundException("Product with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -65,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
             try {
                 throw new NotFoundException("Product with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -78,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
             try {
                 throw new NotFoundException("Product with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }

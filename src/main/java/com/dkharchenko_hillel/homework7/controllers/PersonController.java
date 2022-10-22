@@ -3,6 +3,7 @@ package com.dkharchenko_hillel.homework7.controllers;
 import com.dkharchenko_hillel.homework7.converters.PersonConverter;
 import com.dkharchenko_hillel.homework7.dtos.PersonDto;
 import com.dkharchenko_hillel.homework7.services.PersonService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class PersonController {
     private final PersonService personService;
@@ -34,6 +36,7 @@ public class PersonController {
     public String addPerson(@ModelAttribute("person") PersonDto personDto) {
         personService.addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getPhoneNumber(),
                 personDto.getUsername(), personDto.getPassword());
+        log.info("New customer is added to persons table: {}", personDto.getUsername());
         return "redirect:/all_persons";
     }
 
@@ -41,6 +44,7 @@ public class PersonController {
     @Transactional
     public String removePersonById(@RequestParam Long id) {
         personService.removePersonById(id);
+        log.info("Customer is removed from persons table: {}", id);
         return "redirect:/all_persons";
     }
 
@@ -62,6 +66,7 @@ public class PersonController {
     public String updatePersonFirstNameByUsername(@ModelAttribute("person") PersonDto personDto) {
         personService.updatePersonFirstNameByUsername(httpServletRequest.getUserPrincipal().getName(),
                 personDto.getFirstName());
+        log.info("Customer is updated: {}", httpServletRequest.getUserPrincipal().getName());
         return "updatePersonFirstNameSuccess";
     }
 
@@ -76,6 +81,7 @@ public class PersonController {
     public String updatePersonLastNameByUsername(@ModelAttribute("person") PersonDto personDto) {
         personService.updatePersonLastNameByUsername(httpServletRequest.getUserPrincipal().getName(),
                 personDto.getLastName());
+        log.info("Customer is updated: {}", httpServletRequest.getUserPrincipal().getName());
         return "updatePersonLastNameSuccess";
     }
 
@@ -90,6 +96,7 @@ public class PersonController {
     public String updatePersonPhoneNumberByUsername(@ModelAttribute("person") PersonDto personDto) {
         personService.updatePersonPhoneNumberByUsername(httpServletRequest.getUserPrincipal().getName(),
                 personDto.getPhoneNumber());
+        log.info("Customer is updated: {}", httpServletRequest.getUserPrincipal().getName());
         return "updatePersonPhoneNumberSuccess";
     }
 }

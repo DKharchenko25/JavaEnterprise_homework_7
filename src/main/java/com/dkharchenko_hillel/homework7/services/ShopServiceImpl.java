@@ -3,10 +3,12 @@ package com.dkharchenko_hillel.homework7.services;
 import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Shop;
 import com.dkharchenko_hillel.homework7.reposiroties.ShopRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class ShopServiceImpl implements ShopService {
 
@@ -29,6 +31,7 @@ public class ShopServiceImpl implements ShopService {
             try {
                 throw new NotFoundException("Shop with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -42,6 +45,7 @@ public class ShopServiceImpl implements ShopService {
             try {
                 throw new NotFoundException("Shop with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -60,6 +64,7 @@ public class ShopServiceImpl implements ShopService {
             try {
                 throw new NotFoundException("Shop with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }

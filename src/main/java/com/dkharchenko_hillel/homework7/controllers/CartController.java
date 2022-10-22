@@ -5,6 +5,7 @@ import com.dkharchenko_hillel.homework7.converters.ProductConverter;
 import com.dkharchenko_hillel.homework7.dtos.ProductDto;
 import com.dkharchenko_hillel.homework7.services.CartService;
 import com.dkharchenko_hillel.homework7.services.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.dkharchenko_hillel.homework7.converters.CartConverter.convertCartToCartDto;
 
+@Slf4j
 @Controller
 public class CartController {
 
@@ -32,6 +34,7 @@ public class CartController {
     @RequestMapping(value = "/add_cart", method = {RequestMethod.POST, RequestMethod.GET})
     public String addCart() {
         cartService.addCartByPersonUsername(httpServletRequest.getUserPrincipal().getName());
+        log.info("New cart is added for user: {}", httpServletRequest.getUserPrincipal().getName());
         return "redirect:/person_carts";
     }
 
@@ -39,6 +42,7 @@ public class CartController {
     @Transactional
     public String removeCartById(@RequestParam Long id) {
         cartService.removeCartById(id);
+        log.info("Cart is removed: {}", id);
         return "redirect:/person_carts";
     }
 
@@ -78,6 +82,7 @@ public class CartController {
     @Transactional
     public String addProductByProductId(@ModelAttribute("product") ProductDto productDto) {
         cartService.addProductByProductId(productDto.getCartId(), productDto.getId());
+        log.info("Product #{}, is added to cart #{} ", productDto.getId(), productDto.getCartId());
         return "redirect:/get_cart?id=" + productDto.getCartId();
     }
 
@@ -85,6 +90,7 @@ public class CartController {
     @Transactional
     public String removeProductByProductId(@RequestParam Long cartId, @RequestParam Long productId) {
         cartService.removeProductByProductId(cartId, productId);
+        log.info("Product #{}, is removed from cart #{} ", productId, cartId);
         return "redirect:/get_cart?id=" + cartId;
     }
 
@@ -92,6 +98,7 @@ public class CartController {
     @Transactional
     public String removeAllProductsById(@RequestParam Long id) {
         cartService.removeAllProductsById(id);
+        log.info("All products are removed from cart #{} ", id);
         return "redirect:/person_carts";
     }
 

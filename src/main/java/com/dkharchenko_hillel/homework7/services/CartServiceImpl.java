@@ -5,12 +5,14 @@ import com.dkharchenko_hillel.homework7.models.Cart;
 import com.dkharchenko_hillel.homework7.models.Person;
 import com.dkharchenko_hillel.homework7.models.Product;
 import com.dkharchenko_hillel.homework7.reposiroties.CartRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
@@ -40,6 +42,7 @@ public class CartServiceImpl implements CartService {
             try {
                 throw new NotFoundException("Cart with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -53,6 +56,7 @@ public class CartServiceImpl implements CartService {
             try {
                 throw new NotFoundException("Cart with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -82,6 +86,7 @@ public class CartServiceImpl implements CartService {
             try {
                 throw new NotFoundException("Cart with ID #" + cartId + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -99,6 +104,7 @@ public class CartServiceImpl implements CartService {
             try {
                 throw new NotFoundException("Cart with ID #" + cartId + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -115,6 +121,7 @@ public class CartServiceImpl implements CartService {
             try {
                 throw new NotFoundException("Cart with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -125,6 +132,7 @@ public class CartServiceImpl implements CartService {
             try {
                 throw new NotFoundException("Cart don't contains product with ID #" + product.getId());
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -135,6 +143,7 @@ public class CartServiceImpl implements CartService {
             try {
                 throw new NotFoundException("Cart is already contains product with ID #" + product.getId());
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }

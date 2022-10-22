@@ -4,6 +4,7 @@ import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Person;
 import com.dkharchenko_hillel.homework7.models.Role;
 import com.dkharchenko_hillel.homework7.reposiroties.PersonRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service
 public class PersonServiceImpl implements PersonService {
     @Autowired
@@ -44,6 +46,7 @@ public class PersonServiceImpl implements PersonService {
             try {
                 throw new NotFoundException("Person with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -57,6 +60,7 @@ public class PersonServiceImpl implements PersonService {
             try {
                 throw new NotFoundException("Person with username " + username + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -70,6 +74,7 @@ public class PersonServiceImpl implements PersonService {
             try {
                 throw new NotFoundException("Person with ID #" + id + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -88,6 +93,7 @@ public class PersonServiceImpl implements PersonService {
             try {
                 throw new NotFoundException("Person with username " + username + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -101,6 +107,7 @@ public class PersonServiceImpl implements PersonService {
             try {
                 throw new NotFoundException("Person with username " + username + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }
@@ -114,6 +121,7 @@ public class PersonServiceImpl implements PersonService {
             try {
                 throw new NotFoundException("Person with username " + username + " is not found");
             } catch (NotFoundException e) {
+                log.error(e.getMessage());
                 throw new IllegalArgumentException(e);
             }
         }

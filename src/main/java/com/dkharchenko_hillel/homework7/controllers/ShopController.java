@@ -3,6 +3,7 @@ package com.dkharchenko_hillel.homework7.controllers;
 import com.dkharchenko_hillel.homework7.converters.ShopConverter;
 import com.dkharchenko_hillel.homework7.dtos.ShopDto;
 import com.dkharchenko_hillel.homework7.services.ShopService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 public class ShopController {
 
@@ -32,6 +34,7 @@ public class ShopController {
     @RequestMapping(value = "/add_shop", method = RequestMethod.POST)
     public String addShop(@ModelAttribute("shop") ShopDto shopDto) {
         shopService.addShop(shopDto.getName());
+        log.info("New shop is added: {}", shopDto.getName());
         return "addShopSuccess";
     }
 
@@ -45,6 +48,7 @@ public class ShopController {
     @Transactional
     public String removeShopById(@ModelAttribute("shop") ShopDto shopDto) {
         shopService.removeShopById(shopDto.getId());
+        log.info("Shop is removed: {}", shopDto.getId());
         return "removeShopSuccess";
     }
 
@@ -65,6 +69,7 @@ public class ShopController {
     @Transactional
     public String updateShopNameById(@ModelAttribute("shop") ShopDto shopDto) {
         shopService.updateShopNameById(shopDto.getId(), shopDto.getName());
+        log.info("Shop is updated: {}", shopDto.getId());
         return "updateShopNameSuccess";
     }
 }
