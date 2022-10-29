@@ -3,6 +3,7 @@ package com.dkharchenko_hillel.homework7.services;
 import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Product;
 import com.dkharchenko_hillel.homework7.reposiroties.ProductRepository;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(String name, Double price, Long shopId) {
+    public void addProduct(@NonNull String name, @NonNull Double price, @NonNull Long shopId) {
+        checkName(name);
         Product product = new Product(name, price);
         product.setShop(shopService.getShopById(shopId));
         shopService.getShopById(shopId).getProducts().add(product);
@@ -28,9 +30,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void removeProductById(Long id) {
+    public void removeProductById(@NonNull Long id) {
         if (productRepository.existsById(id)) {
-            shopService.getShopById(id).getProducts().remove(getProductById(id));
+            shopService.getShopById(id).getProducts()
+                    .remove(productRepository.findById(id).orElseThrow(IllegalArgumentException::new));
             productRepository.deleteById(id);
         } else {
             try {
@@ -43,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(@NonNull Long id) {
         if (productRepository.findById(id).isPresent()) {
             return productRepository.findById(id).get();
         } else {
@@ -62,7 +65,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProductNameById(Long id, String name) {
+    public void updateProductNameById(@NonNull Long id, @NonNull String name) {
+        checkName(name);
         if (productRepository.existsById(id)) {
             productRepository.updateProductNameById(id, name);
         } else {
@@ -76,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProductPriceById(Long id, Double price) {
+    public void updateProductPriceById(@NonNull Long id, @NonNull Double price) {
         if (productRepository.existsById(id)) {
             productRepository.updateProductSumById(id, price);
         } else {
@@ -88,4 +92,9 @@ public class ProductServiceImpl implements ProductService {
             }
         }
     }
+
+    private void checkName(String name) {
+        if (!name.matches("[A-Za-zА-Яа-я\\d\\-/()]+")) throw new IllegalArgumentException("Invalid name");
+    }
+
 }

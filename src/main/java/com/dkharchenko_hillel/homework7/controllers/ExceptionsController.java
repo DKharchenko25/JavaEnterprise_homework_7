@@ -12,7 +12,10 @@ public class ExceptionsController implements ErrorController {
     @RequestMapping(PATH)
     @ResponseBody
     public String getErrorPath() {
-        return "Sorry, something went wrong. Access denied or wrong ID was used in input field";
+        return "Sorry, something went wrong. Possible issues:\n " +
+                "1. Access denied;\n" +
+                "2. Wrong ID was used in input field;\n" +
+                "3. Invalid input data was used in input field.";
     }
 }
 

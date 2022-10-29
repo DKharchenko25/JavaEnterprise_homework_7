@@ -37,11 +37,12 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Wrong password");
             return "registration";
         }
-        if (personService.addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getPhoneNumber(),
-                personDto.getUsername(), personDto.getPassword()) == null) {
+        if (personService.getPersonByUsername(personDto.getUsername()).getUsername().equals(personDto.getUsername())) {
             model.addAttribute("usernameError", "User with this username is already exists");
             return "registration";
         }
+        personService.addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getPhoneNumber(),
+                personDto.getUsername(), personDto.getPassword());
         log.info("New user is registered: {}", personDto.getUsername());
         return "redirect:/main";
     }

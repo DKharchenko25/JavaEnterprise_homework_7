@@ -3,6 +3,7 @@ package com.dkharchenko_hillel.homework7.services;
 import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Shop;
 import com.dkharchenko_hillel.homework7.reposiroties.ShopRepository;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,14 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public void addShop(String name) {
+    public void addShop(@NonNull String name) {
+        checkName(name);
         shopRepository.save(new Shop(name));
     }
 
+
     @Override
-    public void removeShopById(Long id) {
+    public void removeShopById(@NonNull Long id) {
         if (shopRepository.existsById(id)) {
             shopRepository.deleteById(id);
         } else {
@@ -38,7 +41,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Shop getShopById(Long id) {
+    public Shop getShopById(@NonNull Long id) {
         if (shopRepository.findById(id).isPresent()) {
             return shopRepository.findById(id).get();
         } else {
@@ -57,7 +60,8 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public void updateShopNameById(Long id, String name) {
+    public void updateShopNameById(@NonNull Long id, @NonNull String name) {
+        checkName(name);
         if (shopRepository.existsById(id)) {
             shopRepository.updateNameById(id, name);
         } else {
@@ -68,5 +72,9 @@ public class ShopServiceImpl implements ShopService {
                 throw new IllegalArgumentException(e);
             }
         }
+    }
+
+    private void checkName(String name) {
+        if (!name.matches("[A-Za-zА-Яа-я\\d\\-]+")) throw new IllegalArgumentException("Invalid name");
     }
 }

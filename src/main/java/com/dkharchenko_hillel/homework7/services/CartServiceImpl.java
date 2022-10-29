@@ -5,6 +5,7 @@ import com.dkharchenko_hillel.homework7.models.Cart;
 import com.dkharchenko_hillel.homework7.models.Person;
 import com.dkharchenko_hillel.homework7.models.Product;
 import com.dkharchenko_hillel.homework7.reposiroties.CartRepository;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addCartByPersonUsername(String username) {
+    public void addCartByPersonUsername(@NonNull String username) {
         Cart cart = new Cart(personService.getPersonByUsername(username));
         personService.getPersonByUsername(username).getCarts().add(cart);
         cartRepository.save(cart);
     }
 
     @Override
-    public void removeCartById(Long id) {
+    public void removeCartById(@NonNull Long id) {
         if (cartRepository.findById(id).isPresent()) {
             Cart cart = cartRepository.findById(id).get();
             personService.getPersonById(cart.getPerson().getId()).getCarts().remove(cart);
@@ -49,7 +50,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartById(Long id) {
+    public Cart getCartById(@NonNull Long id) {
         if (cartRepository.findById(id).isPresent()) {
             return cartRepository.findById(id).get();
         } else {
@@ -68,14 +69,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Cart> getAllPersonCarts(String username) {
+    public List<Cart> getAllPersonCarts(@NonNull String username) {
         Person person = personService.getPersonByUsername(username);
         return getAllCarts().stream().filter(cart -> cart.getPerson().getUsername().equals(person.getUsername()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void addProductByProductId(Long cartId, Long productId) {
+    public void addProductByProductId(@NonNull Long cartId, @NonNull Long productId) {
         if (cartRepository.findById(cartId).isPresent()) {
             Cart cart = cartRepository.findById(cartId).get();
             Product product = productService.getProductById(productId);
@@ -93,7 +94,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void removeProductByProductId(Long cartId, Long productId) {
+    public void removeProductByProductId(@NonNull Long cartId, @NonNull Long productId) {
         if (cartRepository.findById(cartId).isPresent()) {
             Cart cart = cartRepository.findById(cartId).get();
             Product product = productService.getProductById(productId);
@@ -111,7 +112,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void removeAllProductsById(Long id) {
+    public void removeAllProductsById(@NonNull Long id) {
         if (cartRepository.findById(id).isPresent()) {
             Cart cart = cartRepository.findById(id).get();
             cart.getProducts().clear();
