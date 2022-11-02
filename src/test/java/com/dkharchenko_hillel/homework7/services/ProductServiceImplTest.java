@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.services;
 
+import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Product;
 import com.dkharchenko_hillel.homework7.models.Shop;
 import com.dkharchenko_hillel.homework7.reposiroties.ProductRepository;
@@ -49,11 +50,9 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void addProductMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> productService.addProduct("", 20.0, 1L));
-        assertThrows(IllegalArgumentException.class, () -> productService.addProduct("!!?", 20.0, 1L));
-        when(shopService.getShopById(1L)).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> productService.addProduct("test", 20.0, 1L));
+    void addProductMustThrowNotFoundException() {
+        when(shopService.getShopById(1L)).thenThrow(NotFoundException.class);
+        assertThrows(NotFoundException.class, () -> productService.addProduct("test", 20.0, 1L));
     }
 
     @Test
@@ -74,11 +73,11 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void removeProductMustThrowIllegalArgumentException() {
+    void removeProductMustThrowNotFoundException() {
         when(productRepository.existsById(1L)).thenReturn(false);
-        assertThrows(IllegalArgumentException.class, () -> productService.removeProductById(1L));
+        assertThrows(NotFoundException.class, () -> productService.removeProductById(1L));
         when(shopService.getShopById(2L)).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> productService.removeProductById(2L));
+        assertThrows(NotFoundException.class, () -> productService.removeProductById(2L));
     }
 
     @Test
@@ -94,9 +93,9 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void getProductMustThrowIllegalArgumentException() {
+    void getProductMustThrowNotFoundException() {
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> productService.getProductById(1L));
+        assertThrows(NotFoundException.class, () -> productService.getProductById(1L));
     }
 
     @Test
@@ -121,11 +120,9 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void updateProductNameMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> productService.updateProductNameById(1L, ""));
-        assertThrows(IllegalArgumentException.class, () -> productService.updateProductNameById(1L, "_1__"));
+    void updateProductNameMustThrowNotFoundException() {
         when(productRepository.existsById(1L)).thenReturn(false);
-        assertThrows(IllegalArgumentException.class, () -> productService.updateProductNameById(1L, "test"));
+        assertThrows(NotFoundException.class, () -> productService.updateProductNameById(1L, "test"));
     }
 
     @Test
@@ -143,8 +140,8 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void updateProductPriceMustThrowIllegalArgumentException() {
+    void updateProductPriceMustThrowNotFoundException() {
         when(productRepository.existsById(1L)).thenReturn(false);
-        assertThrows(IllegalArgumentException.class, () -> productService.updateProductPriceById(1L, 20.0));
+        assertThrows(NotFoundException.class, () -> productService.updateProductPriceById(1L, 20.0));
     }
 }

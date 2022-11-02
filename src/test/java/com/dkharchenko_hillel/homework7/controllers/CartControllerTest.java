@@ -1,8 +1,9 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
+import com.dkharchenko_hillel.homework7.converters.CartConverter;
 import com.dkharchenko_hillel.homework7.dtos.ProductDto;
+import com.dkharchenko_hillel.homework7.facades.CartFacade;
 import com.dkharchenko_hillel.homework7.models.Cart;
-import com.dkharchenko_hillel.homework7.services.CartService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -27,7 +28,7 @@ class CartControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CartService cartService;
+    private CartFacade cartFacade;
 
     @Test
     @WithMockUser(username = "admin", password = "0000", roles = "ADMIN")
@@ -50,7 +51,7 @@ class CartControllerTest {
     void getCartById() throws Exception {
         Cart cart = new Cart();
         cart.setId(1L);
-        Mockito.when(cartService.getCartById(1L)).thenReturn(cart);
+        Mockito.when(cartFacade.getCartById(1L)).thenReturn(CartConverter.convertCartToCartDto(cart));
         mockMvc.perform(get("/get_cart").param("id", "1"))
                 .andExpect(status().is(200))
                 .andExpect(view().name("getCartSuccess"));
@@ -87,7 +88,7 @@ class CartControllerTest {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setCartId(1L);
-        Mockito.doNothing().when(cartService).addProductByProductId(productDto.getCartId(), productDto.getId());
+        Mockito.doNothing().when(cartFacade).addProductById(productDto);
         mockMvc.perform(put("/add_to_cart").param("cartId", "1").param("productId", "1"))
                 .andExpect(status().is(302))
                 .andExpect(view().name("redirect:/get_cart?id=" + productDto.getCartId()));

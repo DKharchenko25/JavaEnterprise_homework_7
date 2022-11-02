@@ -40,12 +40,8 @@ public class CartServiceImpl implements CartService {
             personService.getPersonById(cart.getPerson().getId()).getCarts().remove(cart);
             cartRepository.deleteById(id);
         } else {
-            try {
-                throw new NotFoundException("Cart with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
@@ -54,12 +50,8 @@ public class CartServiceImpl implements CartService {
         if (cartRepository.findById(id).isPresent()) {
             return cartRepository.findById(id).get();
         } else {
-            try {
-                throw new NotFoundException("Cart with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
@@ -84,12 +76,8 @@ public class CartServiceImpl implements CartService {
             cart.getProducts().add(product);
             increaseAmountAndSum(cart, product);
         } else {
-            try {
-                throw new NotFoundException("Cart with ID #" + cartId + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(cartId));
+            throw new NotFoundException(getExceptionMessage(cartId));
         }
     }
 
@@ -102,12 +90,8 @@ public class CartServiceImpl implements CartService {
             decreaseAmountAndSum(cart, product);
             cart.getProducts().remove(product);
         } else {
-            try {
-                throw new NotFoundException("Cart with ID #" + cartId + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(cartId));
+            throw new NotFoundException(getExceptionMessage(cartId));
         }
     }
 
@@ -119,34 +103,22 @@ public class CartServiceImpl implements CartService {
             cart.setSum(new BigDecimal("0.00"));
             cart.setAmountOfProducts(0);
         } else {
-            try {
-                throw new NotFoundException("Cart with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
     private void checkNotContainsProduct(Cart cart, Product product) {
         if (!cart.getProducts().contains(product)) {
-            try {
-                throw new NotFoundException("Cart don't contains product with ID #" + product.getId());
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Cart don't contains product with ID #" + product.getId());
+            throw new NotFoundException("Cart don't contains product with ID #" + product.getId());
         }
     }
 
     private void checkContainsProduct(Cart cart, Product product) {
         if (cart.getProducts().contains(product)) {
-            try {
-                throw new NotFoundException("Cart is already contains product with ID #" + product.getId());
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Cart is already contains product with ID #" + product.getId());
+            throw new NotFoundException("Cart is already contains product with ID #" + product.getId());
         }
     }
 
@@ -164,5 +136,9 @@ public class CartServiceImpl implements CartService {
             cart.setSum(new BigDecimal("0.00"));
             cart.setAmountOfProducts(0);
         }
+    }
+
+    private static String getExceptionMessage(Long id) {
+        return "Cart with ID #" + id + " is not found";
     }
 }

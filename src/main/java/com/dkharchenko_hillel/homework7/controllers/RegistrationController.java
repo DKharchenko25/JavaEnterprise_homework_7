@@ -1,8 +1,8 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
 import com.dkharchenko_hillel.homework7.dtos.PersonDto;
+import com.dkharchenko_hillel.homework7.facades.PersonFacade;
 import com.dkharchenko_hillel.homework7.models.Person;
-import com.dkharchenko_hillel.homework7.services.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class RegistrationController {
 
-    private final PersonService personService;
+    private final PersonFacade personFacade;
 
 
-    public RegistrationController(PersonService personService) {
-        this.personService = personService;
+    public RegistrationController(PersonFacade personFacade) {
+        this.personFacade = personFacade;
     }
 
     @GetMapping("/registration")
@@ -37,12 +37,11 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Wrong password");
             return "registration";
         }
-        if (personService.getPersonByUsername(personDto.getUsername()).getUsername().equals(personDto.getUsername())) {
+        if (personFacade.getPersonByUsername(personDto.getUsername()).getUsername().equals(personDto.getUsername())) {
             model.addAttribute("usernameError", "User with this username is already exists");
             return "registration";
         }
-        personService.addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getPhoneNumber(),
-                personDto.getUsername(), personDto.getPassword());
+        personFacade.addPerson(personDto);
         log.info("New user is registered: {}", personDto.getUsername());
         return "redirect:/main";
     }

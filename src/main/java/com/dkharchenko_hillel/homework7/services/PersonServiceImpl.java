@@ -28,11 +28,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person addPerson(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,
-                            @NonNull String username, @NonNull String password) {
-        checkName(firstName);
-        checkName(lastName);
-        checkNumber(phoneNumber);
+    public void addPerson(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,
+                          @NonNull String username, @NonNull String password) {
         Person newPerson = new Person();
         newPerson.setFirstName(firstName);
         newPerson.setLastName(lastName);
@@ -44,7 +41,7 @@ public class PersonServiceImpl implements PersonService {
         } else {
             newPerson.setRoles(Collections.singleton(new Role(1L, "ROLE_CUSTOMER")));
         }
-        return personRepository.save(newPerson);
+        personRepository.save(newPerson);
     }
 
     @Override
@@ -52,12 +49,8 @@ public class PersonServiceImpl implements PersonService {
         if (personRepository.existsById(id)) {
             personRepository.deleteById(id);
         } else {
-            try {
-                throw new NotFoundException("Person with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Person with ID #" + id + " is not found");
+            throw new NotFoundException("Person with ID #" + id + " is not found");
         }
     }
 
@@ -66,12 +59,8 @@ public class PersonServiceImpl implements PersonService {
         if (personRepository.findPersonByUsername(username) != null) {
             return personRepository.findPersonByUsername(username);
         } else {
-            try {
-                throw new NotFoundException("Person with username " + username + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Person with username" + username + " is not found");
+            throw new NotFoundException("Person with username" + username + " is not found");
         }
     }
 
@@ -80,12 +69,8 @@ public class PersonServiceImpl implements PersonService {
         if (personRepository.findById(id).isPresent()) {
             return personRepository.findById(id).get();
         } else {
-            try {
-                throw new NotFoundException("Person with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Person with ID #" + id + " is not found");
+            throw new NotFoundException("Person with ID #" + id + " is not found");
         }
     }
 
@@ -96,46 +81,31 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void updatePersonFirstNameByUsername(@NonNull String username, @NonNull String firstName) {
-        checkName(firstName);
         if (personRepository.findPersonByUsername(username) != null) {
             personRepository.updatePersonFirstNameByUsername(username, firstName);
         } else {
-            try {
-                throw new NotFoundException("Person with username " + username + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Person with username" + username + " is not found");
+            throw new NotFoundException("Person with username" + username + " is not found");
         }
     }
 
     @Override
     public void updatePersonLastNameByUsername(@NonNull String username, @NonNull String lastName) {
-        checkName(lastName);
         if (personRepository.findPersonByUsername(username) != null) {
             personRepository.updatePersonLastNameByUsername(username, lastName);
         } else {
-            try {
-                throw new NotFoundException("Person with username " + username + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Person with username" + username + " is not found");
+            throw new NotFoundException("Person with username" + username + " is not found");
         }
     }
 
     @Override
     public void updatePersonPhoneNumberByUsername(@NonNull String username, @NonNull String phoneNumber) {
-        checkNumber(phoneNumber);
         if (personRepository.findPersonByUsername(username) != null) {
             personRepository.updatePersonPhoneNumberByUsername(username, phoneNumber);
         } else {
-            try {
-                throw new NotFoundException("Person with username " + username + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error("Person with username" + username + " is not found");
+            throw new NotFoundException("Person with username" + username + " is not found");
         }
     }
 
@@ -146,14 +116,6 @@ public class PersonServiceImpl implements PersonService {
             throw new UsernameNotFoundException(username);
         }
         return person;
-    }
-
-    private void checkName(String name) {
-        if (!name.matches("[A-Za-zА-Яа-я]+")) throw new IllegalArgumentException("Invalid name");
-    }
-
-    private void checkNumber(String number) {
-        if (!number.matches("[\\d+]+")) throw new IllegalArgumentException("Invalid number");
     }
 }
 

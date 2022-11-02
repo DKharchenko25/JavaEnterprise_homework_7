@@ -1,8 +1,7 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
-import com.dkharchenko_hillel.homework7.converters.PersonConverter;
 import com.dkharchenko_hillel.homework7.dtos.PersonDto;
-import com.dkharchenko_hillel.homework7.services.PersonService;
+import com.dkharchenko_hillel.homework7.facades.PersonFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,18 +9,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 public class PersonController {
-    private final PersonService personService;
+    private final PersonFacade personFacade;
 
     private final HttpServletRequest httpServletRequest;
 
 
-    public PersonController(PersonService personService, HttpServletRequest httpServletRequest) {
-        this.personService = personService;
+    public PersonController(PersonFacade personFacade, HttpServletRequest httpServletRequest) {
+        this.personFacade = personFacade;
         this.httpServletRequest = httpServletRequest;
     }
 
@@ -34,8 +32,7 @@ public class PersonController {
 
     @RequestMapping(value = "/add_person", method = RequestMethod.POST)
     public String addPerson(@ModelAttribute("person") PersonDto personDto) {
-        personService.addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getPhoneNumber(),
-                personDto.getUsername(), personDto.getPassword());
+        personFacade.addPerson(personDto);
         log.info("New customer is added to persons table: {}", personDto.getUsername());
         return "redirect:/all_persons";
     }
@@ -43,15 +40,14 @@ public class PersonController {
     @RequestMapping(value = "/remove_person", method = {RequestMethod.DELETE, RequestMethod.POST, RequestMethod.GET})
     @Transactional
     public String removePersonById(@RequestParam Long id) {
-        personService.removePersonById(id);
+        personFacade.removePerson(id);
         log.info("Customer is removed from persons table: {}", id);
         return "redirect:/all_persons";
     }
 
     @GetMapping("/all_persons")
     public String getAllPersons(Model model) {
-        model.addAttribute("all", personService.getAllPersons().stream()
-                .map(PersonConverter::convertPersonToPersonDto).collect(Collectors.toList()));
+        model.addAttribute("all", personFacade.getAllPersons());
         return "allPersons";
     }
 
@@ -64,7 +60,7 @@ public class PersonController {
     @RequestMapping(value = "/update_first_name", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updatePersonFirstNameByUsername(@ModelAttribute("person") PersonDto personDto) {
-        personService.updatePersonFirstNameByUsername(httpServletRequest.getUserPrincipal().getName(),
+        personFacade.updatePersonFirstNameByUsername(httpServletRequest.getUserPrincipal().getName(),
                 personDto.getFirstName());
         log.info("Customer is updated: {}", httpServletRequest.getUserPrincipal().getName());
         return "updatePersonFirstNameSuccess";
@@ -79,7 +75,7 @@ public class PersonController {
     @RequestMapping(value = "/update_last_name", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updatePersonLastNameByUsername(@ModelAttribute("person") PersonDto personDto) {
-        personService.updatePersonLastNameByUsername(httpServletRequest.getUserPrincipal().getName(),
+        personFacade.updatePersonLastNameByUsername(httpServletRequest.getUserPrincipal().getName(),
                 personDto.getLastName());
         log.info("Customer is updated: {}", httpServletRequest.getUserPrincipal().getName());
         return "updatePersonLastNameSuccess";
@@ -94,7 +90,7 @@ public class PersonController {
     @RequestMapping(value = "/update_phone_number", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updatePersonPhoneNumberByUsername(@ModelAttribute("person") PersonDto personDto) {
-        personService.updatePersonPhoneNumberByUsername(httpServletRequest.getUserPrincipal().getName(),
+        personFacade.updatePersonPhoneNumberByUsername(httpServletRequest.getUserPrincipal().getName(),
                 personDto.getPhoneNumber());
         log.info("Customer is updated: {}", httpServletRequest.getUserPrincipal().getName());
         return "updatePersonPhoneNumberSuccess";

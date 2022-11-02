@@ -22,7 +22,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addProduct(@NonNull String name, @NonNull Double price, @NonNull Long shopId) {
-        checkName(name);
         Product product = new Product(name, price);
         product.setShop(shopService.getShopById(shopId));
         shopService.getShopById(shopId).getProducts().add(product);
@@ -36,12 +35,8 @@ public class ProductServiceImpl implements ProductService {
                     .remove(productRepository.findById(id).orElseThrow(IllegalArgumentException::new));
             productRepository.deleteById(id);
         } else {
-            try {
-                throw new NotFoundException("Product with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
@@ -50,12 +45,8 @@ public class ProductServiceImpl implements ProductService {
         if (productRepository.findById(id).isPresent()) {
             return productRepository.findById(id).get();
         } else {
-            try {
-                throw new NotFoundException("Product with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
@@ -66,16 +57,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProductNameById(@NonNull Long id, @NonNull String name) {
-        checkName(name);
         if (productRepository.existsById(id)) {
             productRepository.updateProductNameById(id, name);
         } else {
-            try {
-                throw new NotFoundException("Product with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
@@ -84,17 +70,12 @@ public class ProductServiceImpl implements ProductService {
         if (productRepository.existsById(id)) {
             productRepository.updateProductSumById(id, price);
         } else {
-            try {
-                throw new NotFoundException("Product with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
-    private void checkName(String name) {
-        if (!name.matches("[A-Za-zА-Яа-я\\d\\-/()]+")) throw new IllegalArgumentException("Invalid name");
+    private static String getExceptionMessage(Long id) {
+        return "Product with ID #" + id + " is not found";
     }
-
 }

@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.services;
 
+import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Shop;
 import com.dkharchenko_hillel.homework7.reposiroties.ShopRepository;
 import com.dkharchenko_hillel.homework7.services.test_config.ShopServiceImplTestConfig;
@@ -42,12 +43,6 @@ class ShopServiceImplTest {
     }
 
     @Test
-    void addShopMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> shopService.addShop(""));
-        assertThrows(IllegalArgumentException.class, () -> shopService.addShop("??!!"));
-    }
-
-    @Test
     void removeShopByIdSuccess() {
         when(shopRepository.existsById(anyLong())).thenReturn(true);
         shopService.removeShopById(1L);
@@ -60,9 +55,9 @@ class ShopServiceImplTest {
     }
 
     @Test
-    void removeShopMustThrowIllegalArgumentException() {
+    void removeShopMustThrowNotFoundException() {
         when(shopRepository.existsById(anyLong())).thenReturn(false);
-        assertThrows(IllegalArgumentException.class, () -> shopService.removeShopById(1L));
+        assertThrows(NotFoundException.class, () -> shopService.removeShopById(1L));
     }
 
     @Test
@@ -78,9 +73,9 @@ class ShopServiceImplTest {
     }
 
     @Test
-    void getShopMustThrowIllegalArgumentException() {
+    void getShopMustThrowNotFoundException() {
         when(shopRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> shopService.getShopById(1L));
+        assertThrows(NotFoundException.class, () -> shopService.getShopById(1L));
     }
 
     @Test
@@ -105,10 +100,8 @@ class ShopServiceImplTest {
     }
 
     @Test
-    void updateShopMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> shopService.updateShopNameById(1L, ""));
-        assertThrows(IllegalArgumentException.class, () -> shopService.updateShopNameById(1L, "?/"));
+    void updateShopMustThrowNotFoundException() {
         when(shopRepository.existsById(anyLong())).thenReturn(false);
-        assertThrows(IllegalArgumentException.class, () -> shopService.updateShopNameById(1L, "test"));
+        assertThrows(NotFoundException.class, () -> shopService.updateShopNameById(1L, "test"));
     }
 }

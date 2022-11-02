@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.services;
 
+import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Person;
 import com.dkharchenko_hillel.homework7.reposiroties.PersonRepository;
 import com.dkharchenko_hillel.homework7.services.test_config.PersonServiceImplTestConfig;
@@ -56,21 +57,6 @@ class PersonServiceImplTest {
     }
 
     @Test
-    void addPersonMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> personService.addPerson("", "test",
-                "4565", "test", "test"));
-        assertThrows(IllegalArgumentException.class, () -> personService.addPerson("!_??", "test",
-                "4565", "test", "test"));
-        assertThrows(IllegalArgumentException.class, () -> personService.addPerson("test", "!_??",
-                "4565", "test", "test"));
-        assertThrows(IllegalArgumentException.class, () -> personService.addPerson("test", "",
-                "4565", "test", "test"));
-        assertThrows(IllegalArgumentException.class, () -> personService.addPerson("test", "test",
-                "test", "test", "test"));
-    }
-
-
-    @Test
     void removePersonByIdSuccess() {
         when(personRepository.existsById(2L)).thenReturn(true);
         personService.removePersonById(2L);
@@ -83,9 +69,9 @@ class PersonServiceImplTest {
     }
 
     @Test
-    void removePersonMustThrowIllegalArgumentException() {
+    void removePersonMustThrowNotFoundException() {
         when(personRepository.existsById(1L)).thenReturn(false);
-        assertThrows(IllegalArgumentException.class, () -> personService.removePersonById(1L));
+        assertThrows(NotFoundException.class, () -> personService.removePersonById(1L));
     }
 
     @Test
@@ -102,9 +88,9 @@ class PersonServiceImplTest {
     }
 
     @Test
-    void getPersonByUsernameMustThrowIllegalArgumentException() {
+    void getPersonByUsernameMustThrowNotFoundException() {
         when(personRepository.findPersonByUsername("test")).thenReturn(null);
-        assertThrows(IllegalArgumentException.class, () -> personService.getPersonByUsername("test"));
+        assertThrows(NotFoundException.class, () -> personService.getPersonByUsername("test"));
     }
 
     @Test
@@ -120,9 +106,9 @@ class PersonServiceImplTest {
     }
 
     @Test
-    void getPersonByUIdMustThrowIllegalArgumentException() {
+    void getPersonByUIdMustThrowNotFoundException() {
         when(personRepository.findById(2L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> personService.getPersonById(2L));
+        assertThrows(NotFoundException.class, () -> personService.getPersonById(2L));
     }
 
     @Test
@@ -149,11 +135,9 @@ class PersonServiceImplTest {
     }
 
     @Test
-    void updatePersonFirstNameMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonFirstNameByUsername("test", ""));
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonFirstNameByUsername("test", "!_+?"));
+    void updatePersonFirstNameMustThrowNotFoundException() {
         when(personRepository.findPersonByUsername("test")).thenReturn(null);
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonFirstNameByUsername("test", "Tom"));
+        assertThrows(NotFoundException.class, () -> personService.updatePersonFirstNameByUsername("test", "Tom"));
     }
 
     @Test
@@ -173,11 +157,9 @@ class PersonServiceImplTest {
     }
 
     @Test
-    void updatePersonLastNameMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonLastNameByUsername("test", ""));
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonLastNameByUsername("test", "!_+?"));
+    void updatePersonLastNameMustThrowNotFoundException() {
         when(personRepository.findPersonByUsername("test")).thenReturn(null);
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonLastNameByUsername("test", "Tom"));
+        assertThrows(NotFoundException.class, () -> personService.updatePersonLastNameByUsername("test", "Tom"));
     }
 
     @Test
@@ -197,11 +179,9 @@ class PersonServiceImplTest {
     }
 
     @Test
-    void updatePersonPhoneNumberMustThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonPhoneNumberByUsername("test", ""));
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonPhoneNumberByUsername("test", "!_+?"));
+    void updatePersonPhoneNumberMustThrowNotFoundException() {
         when(personRepository.findPersonByUsername("test")).thenReturn(null);
-        assertThrows(IllegalArgumentException.class, () -> personService.updatePersonPhoneNumberByUsername("test", "+309875"));
+        assertThrows(NotFoundException.class, () -> personService.updatePersonPhoneNumberByUsername("test", "+309875"));
     }
 
     @Test

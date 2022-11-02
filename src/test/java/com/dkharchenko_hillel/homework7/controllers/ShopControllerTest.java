@@ -1,7 +1,7 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
 import com.dkharchenko_hillel.homework7.dtos.ShopDto;
-import com.dkharchenko_hillel.homework7.services.ShopService;
+import com.dkharchenko_hillel.homework7.facades.ShopFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -25,7 +25,7 @@ class ShopControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ShopService shopService;
+    private ShopFacade shopFacade;
 
     @Test
     @WithMockUser(username = "admin", password = "0000", roles = "ADMIN")
@@ -42,7 +42,7 @@ class ShopControllerTest {
         ShopDto shopDto = new ShopDto();
         shopDto.setId(1L);
         shopDto.setName("test");
-        Mockito.doNothing().when(shopService).addShop("test");
+        Mockito.doNothing().when(shopFacade).addShop(shopDto);
         mockMvc.perform(post("/add_shop", shopDto))
                 .andExpect(status().isOk())
                 .andExpect(view().name("addShopSuccess"))
@@ -63,7 +63,7 @@ class ShopControllerTest {
     void removeShopById() throws Exception {
         ShopDto shopDto = new ShopDto();
         shopDto.setId(1L);
-        Mockito.doNothing().when(shopService).removeShopById(1L);
+        Mockito.doNothing().when(shopFacade).removeShop(shopDto);
         mockMvc.perform(delete("/remove_shop", shopDto))
                 .andExpect(status().isOk())
                 .andExpect(view().name("removeShopSuccess"))

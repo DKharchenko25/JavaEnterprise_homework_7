@@ -21,7 +21,6 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void addShop(@NonNull String name) {
-        checkName(name);
         shopRepository.save(new Shop(name));
     }
 
@@ -31,12 +30,8 @@ public class ShopServiceImpl implements ShopService {
         if (shopRepository.existsById(id)) {
             shopRepository.deleteById(id);
         } else {
-            try {
-                throw new NotFoundException("Shop with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
@@ -45,12 +40,8 @@ public class ShopServiceImpl implements ShopService {
         if (shopRepository.findById(id).isPresent()) {
             return shopRepository.findById(id).get();
         } else {
-            try {
-                throw new NotFoundException("Shop with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
@@ -61,20 +52,15 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void updateShopNameById(@NonNull Long id, @NonNull String name) {
-        checkName(name);
         if (shopRepository.existsById(id)) {
             shopRepository.updateNameById(id, name);
         } else {
-            try {
-                throw new NotFoundException("Shop with ID #" + id + " is not found");
-            } catch (NotFoundException e) {
-                log.error(e.getMessage());
-                throw new IllegalArgumentException(e);
-            }
+            log.error(getExceptionMessage(id));
+            throw new NotFoundException(getExceptionMessage(id));
         }
     }
 
-    private void checkName(String name) {
-        if (!name.matches("[A-Za-zА-Яа-я\\d\\-]+")) throw new IllegalArgumentException("Invalid name");
+    private static String getExceptionMessage(Long id) {
+        return "Shop with ID #" + id + " is not found";
     }
 }

@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.services;
 
+import com.dkharchenko_hillel.homework7.NotFoundException;
 import com.dkharchenko_hillel.homework7.models.Cart;
 import com.dkharchenko_hillel.homework7.models.Person;
 import com.dkharchenko_hillel.homework7.models.Product;
@@ -50,9 +51,9 @@ class CartServiceImplTest {
     }
 
     @Test
-    void addCartMustThrowIllegalArgumentException() {
-        when(personService.getPersonByUsername("test")).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> cartService.addCartByPersonUsername("test"));
+    void addCartMustThrowNotFoundException() {
+        when(personService.getPersonByUsername("test")).thenThrow(NotFoundException.class);
+        assertThrows(NotFoundException.class, () -> cartService.addCartByPersonUsername("test"));
     }
 
     @Test
@@ -74,11 +75,11 @@ class CartServiceImplTest {
     }
 
     @Test
-    void removeCartMustThrowIllegalArgumentException() {
+    void removeCartMustThrowNotFoundExceptionn() {
         when(cartRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> cartService.removeCartById(1L));
-        when(personService.getPersonById(3L)).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> cartService.removeCartById(3L));
+        assertThrows(NotFoundException.class, () -> cartService.removeCartById(1L));
+        when(personService.getPersonById(3L)).thenThrow(NotFoundException.class);
+        assertThrows(NotFoundException.class, () -> cartService.removeCartById(3L));
     }
 
     @Test
@@ -94,9 +95,9 @@ class CartServiceImplTest {
     }
 
     @Test
-    void getCartMustThrowIllegalArgumentException() {
+    void getCartMustThrowNotFoundException() {
         when(cartRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> cartService.getCartById(1L));
+        assertThrows(NotFoundException.class, () -> cartService.getCartById(1L));
     }
 
     @Test
@@ -122,9 +123,9 @@ class CartServiceImplTest {
     }
 
     @Test
-    void getAllPersonCartsMustThrowIllegalArgumentException() {
-        when(personService.getPersonByUsername("test")).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> cartService.getAllPersonCarts("test"));
+    void getAllPersonCartsMustThrowNotFoundException() {
+        when(personService.getPersonByUsername("test")).thenThrow(NotFoundException.class);
+        assertThrows(NotFoundException.class, () -> cartService.getAllPersonCarts("test"));
     }
 
     @Test
@@ -149,15 +150,15 @@ class CartServiceImplTest {
     }
 
     @Test
-    void addProductMustThrowIllegalArgumentException() {
+    void addProductMustThrowNotFoundException() {
         when(cartRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> cartService.addProductByProductId(1L, 1L));
+        assertThrows(NotFoundException.class, () -> cartService.addProductByProductId(1L, 1L));
 
         Cart exceptionCart = new Cart();
         exceptionCart.setId(3L);
         when(cartRepository.findById(3L)).thenReturn(Optional.of(exceptionCart));
-        when(productService.getProductById(3L)).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> cartService.addProductByProductId(3L, 3L));
+        when(productService.getProductById(3L)).thenThrow(NotFoundException.class);
+        assertThrows(NotFoundException.class, () -> cartService.addProductByProductId(3L, 3L));
     }
 
     @Test
@@ -183,14 +184,14 @@ class CartServiceImplTest {
     }
 
     @Test
-    void removeProductMustThrowIllegalArgumentException() {
+    void removeProductMustThrowNotFoundException() {
         when(cartRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> cartService.removeProductByProductId(1L, 1L));
+        assertThrows(NotFoundException.class, () -> cartService.removeProductByProductId(1L, 1L));
 
         Cart exceptionCart = new Cart();
         exceptionCart.setId(2L);
-        when(productService.getProductById(2L)).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> cartService.removeProductByProductId(2L, 2L));
+        when(productService.getProductById(2L)).thenThrow(NotFoundException.class);
+        assertThrows(NotFoundException.class, () -> cartService.removeProductByProductId(2L, 2L));
     }
 
 
@@ -214,8 +215,8 @@ class CartServiceImplTest {
     }
 
     @Test
-    void removeAllMustThrowIllegalArgumentException() {
+    void removeAllMustThrowNotFoundException() {
         when(cartRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> cartService.removeAllProductsById(1L));
+        assertThrows(NotFoundException.class, () -> cartService.removeAllProductsById(1L));
     }
 }

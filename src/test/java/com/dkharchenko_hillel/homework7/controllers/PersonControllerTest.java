@@ -1,7 +1,7 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
 import com.dkharchenko_hillel.homework7.dtos.PersonDto;
-import com.dkharchenko_hillel.homework7.services.PersonService;
+import com.dkharchenko_hillel.homework7.facades.PersonFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ class PersonControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private PersonService personService;
+    private PersonFacade personFacade;
 
     @Test
     @WithMockUser(username = "admin", password = "0000", roles = "ADMIN")

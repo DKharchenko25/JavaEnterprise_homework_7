@@ -1,7 +1,7 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
 import com.dkharchenko_hillel.homework7.dtos.ProductDto;
-import com.dkharchenko_hillel.homework7.services.ProductService;
+import com.dkharchenko_hillel.homework7.facades.ProductFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductService productService;
+    private ProductFacade productFacade;
 
     @Test
     @WithMockUser(username = "admin", password = "0000", roles = "ADMIN")
@@ -45,7 +45,7 @@ class ProductControllerTest {
         productDto.setName("test");
         productDto.setPrice(20.0);
         productDto.setShopId(1L);
-        doNothing().when(productService).addProduct(productDto.getName(), productDto.getPrice(), productDto.getShopId());
+        doNothing().when(productFacade).addProduct(productDto);
         mockMvc.perform(post("/add_product", productDto))
                 .andExpect(status().isOk())
                 .andExpect(view().name("addProductSuccess"))
@@ -66,7 +66,7 @@ class ProductControllerTest {
     void removeProductById() throws Exception {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
-        doNothing().when(productService).removeProductById(productDto.getId());
+        doNothing().when(productFacade).removeProduct(productDto);
         mockMvc.perform(delete("/remove_product", productDto))
                 .andExpect(status().isOk())
                 .andExpect(view().name("removeProductSuccess"))
@@ -98,7 +98,7 @@ class ProductControllerTest {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setName("test");
-        doNothing().when(productService).updateProductNameById(productDto.getId(), productDto.getName());
+        doNothing().when(productFacade).updateProductName(productDto);
         mockMvc.perform(put("/update_product_name", productDto))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updateProductNameSuccess"))
@@ -120,7 +120,7 @@ class ProductControllerTest {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setPrice(20.0);
-        doNothing().when(productService).updateProductNameById(productDto.getId(), productDto.getName());
+        doNothing().when(productFacade).updateProductName(productDto);
         mockMvc.perform(put("/update_price", productDto))
                 .andExpect(status().isOk())
                 .andExpect(view().name("updateProductPriceSuccess"))

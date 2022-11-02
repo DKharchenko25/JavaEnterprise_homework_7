@@ -1,8 +1,7 @@
 package com.dkharchenko_hillel.homework7.controllers;
 
-import com.dkharchenko_hillel.homework7.converters.ShopConverter;
 import com.dkharchenko_hillel.homework7.dtos.ShopDto;
-import com.dkharchenko_hillel.homework7.services.ShopService;
+import com.dkharchenko_hillel.homework7.facades.ShopFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +11,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.stream.Collectors;
-
 @Slf4j
 @Controller
 public class ShopController {
 
-    private final ShopService shopService;
+    private final ShopFacade shopFacade;
 
-    public ShopController(ShopService shopService) {
-        this.shopService = shopService;
+    public ShopController(ShopFacade shopFacade) {
+        this.shopFacade = shopFacade;
     }
 
 
@@ -33,7 +30,7 @@ public class ShopController {
 
     @RequestMapping(value = "/add_shop", method = RequestMethod.POST)
     public String addShop(@ModelAttribute("shop") ShopDto shopDto) {
-        shopService.addShop(shopDto.getName());
+        shopFacade.addShop(shopDto);
         log.info("New shop is added: {}", shopDto.getName());
         return "addShopSuccess";
     }
@@ -47,15 +44,14 @@ public class ShopController {
     @RequestMapping(value = "/remove_shop", method = {RequestMethod.DELETE, RequestMethod.POST})
     @Transactional
     public String removeShopById(@ModelAttribute("shop") ShopDto shopDto) {
-        shopService.removeShopById(shopDto.getId());
+        shopFacade.removeShop(shopDto);
         log.info("Shop is removed: {}", shopDto.getId());
         return "removeShopSuccess";
     }
 
     @GetMapping("/all_shops")
     public String getAllShops(Model model) {
-        model.addAttribute("all", shopService.getAllShops().stream()
-                .map(ShopConverter::convertShopToShopDto).collect(Collectors.toList()));
+        model.addAttribute("all", shopFacade.getAllShops());
         return "allShops";
     }
 
@@ -68,7 +64,7 @@ public class ShopController {
     @RequestMapping(value = "/update_name", method = {RequestMethod.PUT, RequestMethod.POST})
     @Transactional
     public String updateShopNameById(@ModelAttribute("shop") ShopDto shopDto) {
-        shopService.updateShopNameById(shopDto.getId(), shopDto.getName());
+        shopFacade.updateShopName(shopDto);
         log.info("Shop is updated: {}", shopDto.getId());
         return "updateShopNameSuccess";
     }
