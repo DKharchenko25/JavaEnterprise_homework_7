@@ -81,6 +81,21 @@ public class PersonController {
         return "updatePersonLastNameSuccess";
     }
 
+    @RequestMapping(value = "/update_email", method = RequestMethod.GET)
+    public String updatePersonEmailByUsernameView(Model model) {
+        model.addAttribute("person", new PersonDto());
+        return "updatePersonEmail";
+    }
+
+    @RequestMapping(value = "/update_email", method = {RequestMethod.PUT, RequestMethod.POST})
+    @Transactional
+    public String updatePersonEmailByUsername(@ModelAttribute("person") PersonDto personDto) {
+        personFacade.updatePersonEmailByUsername(httpServletRequest.getUserPrincipal().getName(),
+                personDto.getEmail());
+        log.info("Customer is updated: {}", httpServletRequest.getUserPrincipal().getName());
+        return "updatePersonEmailSuccess";
+    }
+
     @RequestMapping(value = "/update_phone_number", method = RequestMethod.GET)
     public String updatePersonPhoneNumberByUsernameView(Model model) {
         model.addAttribute("person", new PersonDto());

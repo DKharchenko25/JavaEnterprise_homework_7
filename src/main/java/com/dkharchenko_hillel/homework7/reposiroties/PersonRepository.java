@@ -20,6 +20,10 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
     Integer updatePersonLastNameByUsername(String username, String lastName);
 
     @Modifying
+    @Query("update Person set email = ?2 where username = ?1")
+    Integer updatePersonEmailByUsername(String username, String email);
+
+    @Modifying
     @Query("update Person set phoneNumber = ?2 where username = ?1")
     Integer updatePersonPhoneNumberByUsername(String username, String phoneNumber);
 }

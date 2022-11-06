@@ -20,19 +20,23 @@ public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
 
+    private final EmailService emailService;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public PersonServiceImpl(PersonRepository personRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public PersonServiceImpl(PersonRepository personRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.personRepository = personRepository;
+        this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
-    public void addPerson(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,
-                          @NonNull String username, @NonNull String password) {
+    public void addPerson(@NonNull String firstName, @NonNull String lastName, @NonNull String email,
+                          @NonNull String phoneNumber, @NonNull String username, @NonNull String password) {
         Person newPerson = new Person();
         newPerson.setFirstName(firstName);
         newPerson.setLastName(lastName);
+        newPerson.setEmail(email);
         newPerson.setPhoneNumber(phoneNumber);
         newPerson.setUsername(username);
         newPerson.setPassword(bCryptPasswordEncoder.encode(password));
@@ -42,6 +46,7 @@ public class PersonServiceImpl implements PersonService {
             newPerson.setRoles(Collections.singleton(new Role(1L, "ROLE_CUSTOMER")));
         }
         personRepository.save(newPerson);
+        emailService.sendRegistrationEmail(newPerson);
     }
 
     @Override
@@ -93,6 +98,16 @@ public class PersonServiceImpl implements PersonService {
     public void updatePersonLastNameByUsername(@NonNull String username, @NonNull String lastName) {
         if (personRepository.findPersonByUsername(username) != null) {
             personRepository.updatePersonLastNameByUsername(username, lastName);
+        } else {
+            log.error("Person with username" + username + " is not found");
+            throw new NotFoundException("Person with username" + username + " is not found");
+        }
+    }
+
+    @Override
+    public void updatePersonEmailByUsername(@NonNull String username, @NonNull String email) {
+        if (personRepository.findPersonByUsername(username) != null) {
+            personRepository.updatePersonEmailByUsername(username, email);
         } else {
             log.error("Person with username" + username + " is not found");
             throw new NotFoundException("Person with username" + username + " is not found");

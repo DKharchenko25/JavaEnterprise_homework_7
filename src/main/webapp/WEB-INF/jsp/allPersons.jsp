@@ -16,6 +16,7 @@
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>E-mail</th>
             <th>Phone Number</th>
             <th>Username</th>
             <th>Password</th>
@@ -26,6 +27,7 @@
                 <td>${person.id}</td>
                 <td>${person.firstName}</td>
                 <td>${person.lastName}</td>
+                <td>${person.email}</td>
                 <td>${person.phoneNumber}</td>
                 <td>${person.username}</td>
                 <td>${person.password}</td>

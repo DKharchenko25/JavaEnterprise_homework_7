@@ -18,6 +18,7 @@
     <h2>Registration Succeeded!</h2>
     <span>First Name:</span><span>${person.firstName}</span><br/>
     <span>Last Name:</span><span>${person.lastName}</span><br/>
+    <span>Last Name:</span><span>${person.email}</span><br/>
     <span>Phone Number:</span><span>${person.phoneNumber}</span><br/>
 </div>
 <br>

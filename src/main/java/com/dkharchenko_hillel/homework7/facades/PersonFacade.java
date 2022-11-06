@@ -18,5 +18,7 @@ public interface PersonFacade {
 
     void updatePersonLastNameByUsername(String username, String lastName);
 
+    void updatePersonEmailByUsername(String username, String email);
+
     void updatePersonPhoneNumberByUsername(String username, String phoneNumber);
 }

@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.List;
 
 public interface PersonService extends UserDetailsService {
-    void addPerson(String firstName, String lastName, String phoneNumber, String username, String password);
+    void addPerson(String firstName, String lastName, String email, String phoneNumber, String username, String password);
 
     void removePersonById(Long id);
 
@@ -19,6 +19,8 @@ public interface PersonService extends UserDetailsService {
     void updatePersonFirstNameByUsername(String username, String firstName);
 
     void updatePersonLastNameByUsername(String username, String lastName);
+
+    void updatePersonEmailByUsername(String username, String email);
 
     void updatePersonPhoneNumberByUsername(String username, String phoneNumber);
 }

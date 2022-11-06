@@ -1,6 +1,7 @@
 package com.dkharchenko_hillel.homework7.services.test_config;
 
 import com.dkharchenko_hillel.homework7.reposiroties.PersonRepository;
+import com.dkharchenko_hillel.homework7.services.EmailService;
 import com.dkharchenko_hillel.homework7.services.PersonService;
 import com.dkharchenko_hillel.homework7.services.PersonServiceImpl;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -11,7 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class PersonServiceImplTestConfig {
 
     @Bean
-    public PersonService personService(PersonRepository personRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        return new PersonServiceImpl(personRepository, bCryptPasswordEncoder);
+    public PersonService personService(PersonRepository personRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
+                                       EmailService emailService) {
+        return new PersonServiceImpl(personRepository, emailService, bCryptPasswordEncoder);
     }
 }

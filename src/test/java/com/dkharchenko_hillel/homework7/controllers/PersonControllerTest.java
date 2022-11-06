@@ -111,6 +111,27 @@ class PersonControllerTest {
 
     @Test
     @WithMockUser(username = "admin", password = "0000", roles = "ADMIN")
+    void updatePersonEmailByUsernameView() throws Exception {
+        mockMvc.perform(get("/update_email"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("updatePersonEmail"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/updatePersonEmail.jsp"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "0000", roles = "ADMIN")
+    void updatePersonEmailByUsername() throws Exception {
+        PersonDto personDto = new PersonDto();
+        personDto.setId(1L);
+        personDto.setEmail("test@gmail.com");
+        mockMvc.perform(put("/update_email", personDto))
+                .andExpect(status().isOk())
+                .andExpect(view().name("updatePersonEmailSuccess"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/updatePersonEmailSuccess.jsp"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "0000", roles = "ADMIN")
     void updatePersonPhoneNumberByUsernameView() throws Exception {
         mockMvc.perform(get("/update_phone_number"))
                 .andExpect(status().isOk())

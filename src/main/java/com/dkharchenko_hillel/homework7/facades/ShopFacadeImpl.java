@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.dkharchenko_hillel.homework7.facades.InputValidator.checkName;
+
 @Slf4j
 @Component
 public class ShopFacadeImpl implements ShopFacade {
@@ -39,14 +41,5 @@ public class ShopFacadeImpl implements ShopFacade {
     @Override
     public void updateShopName(@NonNull ShopDto dto) {
         shopService.updateShopNameById(dto.getId(), checkName(dto.getName()));
-    }
-
-    private String checkName(String name) {
-        if (name.matches("[A-Za-zА-Яа-я\\d\\-]+")) {
-            return name;
-        } else {
-            log.error("Shop name is invalid: {}", name);
-            throw new IllegalArgumentException("Invalid name");
-        }
     }
 }

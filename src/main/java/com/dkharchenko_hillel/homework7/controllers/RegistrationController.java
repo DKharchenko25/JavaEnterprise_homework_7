@@ -37,10 +37,6 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Wrong password");
             return "registration";
         }
-        if (personFacade.getPersonByUsername(personDto.getUsername()).getUsername().equals(personDto.getUsername())) {
-            model.addAttribute("usernameError", "User with this username is already exists");
-            return "registration";
-        }
         personFacade.addPerson(personDto);
         log.info("New user is registered: {}", personDto.getUsername());
         return "redirect:/main";

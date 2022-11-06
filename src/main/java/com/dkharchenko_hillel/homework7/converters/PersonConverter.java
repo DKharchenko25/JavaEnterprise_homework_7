@@ -10,6 +10,7 @@ public class PersonConverter {
         personDto.setId(person.getId());
         personDto.setFirstName(person.getFirstName());
         personDto.setLastName(person.getLastName());
+        personDto.setEmail(person.getEmail());
         personDto.setPhoneNumber(person.getPhoneNumber());
         personDto.setCarts(person.getCarts());
         personDto.setUsername(person.getUsername());
@@ -22,6 +23,7 @@ public class PersonConverter {
         person.setId(personDto.getId());
         person.setFirstName(personDto.getFirstName());
         person.setLastName(personDto.getLastName());
+        person.setEmail(personDto.getEmail());
         person.setPhoneNumber(personDto.getPhoneNumber());
         person.setCarts(personDto.getCarts());
         person.setUsername(personDto.getUsername());

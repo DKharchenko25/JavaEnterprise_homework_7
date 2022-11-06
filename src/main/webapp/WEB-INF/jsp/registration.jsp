@@ -9,7 +9,8 @@
     <title>Registration</title>
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css?family=PT+Sans');
-        body{
+
+        body {
             background: #fff;
             font-family: 'PT Sans', sans-serif;
         }
@@ -35,6 +36,9 @@
     </div>
     <div>
         <form:input type="text" path="lastName" placeholder="Last Name" autofocus="true"></form:input>
+    </div>
+    <div>
+        <form:input type="text" path="email" placeholder="E-mail" autofocus="true"></form:input>
     </div>
     <div>
         <form:input type="text" path="phoneNumber" placeholder="Phone Number" autofocus="true"></form:input>

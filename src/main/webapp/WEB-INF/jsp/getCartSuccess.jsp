@@ -27,12 +27,14 @@
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>E-mail</th>
             <th>Phone Number</th>
         </tr>
         <tr>
             <th>${cart.person.id}</th>
             <th>${cart.person.firstName}</th>
             <th>${cart.person.lastName}</th>
+            <th>${cart.person.email}</th>
             <th>${cart.person.phoneNumber}</th>
         </tr>
     </table>

@@ -40,14 +40,15 @@ class PersonFacadeImplTest {
         PersonDto personDto = new PersonDto();
         personDto.setFirstName("success");
         personDto.setLastName("success");
+        personDto.setEmail("success@gmail.com");
         personDto.setPhoneNumber("+38097");
         personDto.setUsername("success");
         personDto.setPassword("success");
-        doNothing().when(personService).addPerson(personDto.getFirstName(), personDto.getLastName(),
+        doNothing().when(personService).addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getEmail(),
                 personDto.getPhoneNumber(), personDto.getUsername(), personDto.getPassword());
         personFacade.addPerson(personDto);
-        verify(personService, times(1)).addPerson(personDto.getFirstName(),
-                personDto.getLastName(), personDto.getPhoneNumber(), personDto.getUsername(), personDto.getPassword());
+        verify(personService, times(1)).addPerson(personDto.getFirstName(), personDto.getLastName(),
+                personDto.getEmail(), personDto.getPhoneNumber(), personDto.getUsername(), personDto.getPassword());
     }
 
     @Test
@@ -57,10 +58,11 @@ class PersonFacadeImplTest {
 
     @ParameterizedTest
     @MethodSource("invalidInputsSource")
-    void addPersonMustThrowIllegalArgumentException(String firstName, String lastName, String number) {
+    void addPersonMustThrowIllegalArgumentException(String firstName, String lastName, String email, String number) {
         PersonDto personDto = new PersonDto();
         personDto.setFirstName(firstName);
         personDto.setLastName(lastName);
+        personDto.setEmail(email);
         personDto.setPhoneNumber(number);
         personDto.setUsername("test");
         personDto.setPassword("test");
@@ -69,12 +71,13 @@ class PersonFacadeImplTest {
 
     private static Stream<Arguments> invalidInputsSource() {
         return Stream.of(
-                Arguments.of("", "test", "+38097"),
-                Arguments.of("test", "", "+38097"),
-                Arguments.of("test", "test", "test"),
-                Arguments.of("??!!", "test", "+38097"),
-                Arguments.of("test", "--__", "+38097"),
-                Arguments.of("test", "test", ""));
+                Arguments.of("", "test", "test@gmail.com", "+38097"),
+                Arguments.of("test", "", "test@gmail.com", "+38097"),
+                Arguments.of("test", "test", "test@gmail.com", "test"),
+                Arguments.of("??!!", "test", "test@gmail.com", "+38097"),
+                Arguments.of("test", "--__", "test@gmail.com", "+38097"),
+                Arguments.of("test", "test", "test@gmail.com", ""),
+                Arguments.of("test", "test", "test", "+38097"));
 
     }
 
@@ -173,6 +176,29 @@ class PersonFacadeImplTest {
         assertThrows(NullPointerException.class, () -> personFacade.updatePersonLastNameByUsername(null, "fail"));
         assertThrows(NullPointerException.class, () -> personFacade.updatePersonLastNameByUsername("fail", null));
         assertThrows(NullPointerException.class, () -> personFacade.updatePersonLastNameByUsername(null, null));
+    }
+
+    @Test
+    void updatePersonEmailSuccess() {
+        doNothing().when(personService).updatePersonEmailByUsername("success", "test@gmail.com");
+        personFacade.updatePersonEmailByUsername("success", "test@gmail.com");
+        verify(personService, times(1)).updatePersonEmailByUsername("success", "test@gmail.com");
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidNameSource")
+    void updatePersonEmailByUsernameMustThrowIllegalArgumentException(String name) {
+        assertThrows(IllegalArgumentException.class, () -> personFacade.updatePersonEmailByUsername("fail", name));
+
+        doThrow(NotFoundException.class).when(personService).updatePersonEmailByUsername("fail", "fail@gmail.com");
+        assertThrows(NotFoundException.class, () -> personFacade.updatePersonEmailByUsername("fail", "fail@gmail.com"));
+    }
+
+    @Test
+    void updatePersonEmailByUsernameMustThrowNullPointerException() {
+        assertThrows(NullPointerException.class, () -> personFacade.updatePersonEmailByUsername(null, "fail@gmail.com"));
+        assertThrows(NullPointerException.class, () -> personFacade.updatePersonEmailByUsername("fail", null));
+        assertThrows(NullPointerException.class, () -> personFacade.updatePersonEmailByUsername(null, null));
     }
 
     @Test

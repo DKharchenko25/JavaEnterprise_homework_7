@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.dkharchenko_hillel.homework7.converters.PersonConverter.convertPersonToPersonDto;
+import static com.dkharchenko_hillel.homework7.facades.InputValidator.*;
 
 @Slf4j
 @Component
@@ -24,7 +25,7 @@ public class PersonFacadeImpl implements PersonFacade {
 
     @Override
     public void addPerson(@NonNull PersonDto dto) {
-        personService.addPerson(checkName(dto.getFirstName()), checkName(dto.getLastName()),
+        personService.addPerson(checkName(dto.getFirstName()), checkName(dto.getLastName()), checkEmail(dto.getEmail()),
                 checkNumber(dto.getPhoneNumber()), dto.getUsername(), dto.getPassword());
     }
 
@@ -55,25 +56,13 @@ public class PersonFacadeImpl implements PersonFacade {
     }
 
     @Override
+    public void updatePersonEmailByUsername(@NonNull String username, @NonNull String email) {
+        personService.updatePersonEmailByUsername(username, checkEmail(email));
+    }
+
+    @Override
     public void updatePersonPhoneNumberByUsername(@NonNull String username, @NonNull String phoneNumber) {
         personService.updatePersonPhoneNumberByUsername(username, checkNumber(phoneNumber));
     }
 
-    private String checkName(String name) {
-        if (name.matches("[A-Za-zА-Яа-я]+")) {
-            return name;
-        } else {
-            log.error("Name is invalid: {}", name);
-            throw new IllegalArgumentException("Invalid name");
-        }
-    }
-
-    private String checkNumber(String number) {
-        if (number.matches("[\\d+]+")) {
-            return number;
-        } else {
-            log.error("Number is invalid: {}", number);
-            throw new IllegalArgumentException("Invalid number");
-        }
-    }
 }

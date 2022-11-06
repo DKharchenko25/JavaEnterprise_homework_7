@@ -59,6 +59,8 @@
                 users)</a><br>
             <a href="${pageContext.request.contextPath}/update_last_name">Update person last name(for registered
                 users)</a><br>
+            <a href="${pageContext.request.contextPath}/update_email">Update person e-mail(for registered
+                users)</a><br>
             <a href="${pageContext.request.contextPath}/update_phone_number">Update person phone number(for
                 registered users)</a><br>
         </div>

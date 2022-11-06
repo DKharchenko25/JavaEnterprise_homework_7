@@ -6,6 +6,9 @@ import com.dkharchenko_hillel.homework7.reposiroties.PersonRepository;
 import com.dkharchenko_hillel.homework7.services.test_config.PersonServiceImplTestConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,6 +29,9 @@ import static org.mockito.Mockito.*;
 class PersonServiceImplTest {
     @MockBean
     private PersonRepository personRepository;
+
+    @MockBean
+    private EmailService emailService;
     @Autowired
     private PersonService personService;
 
@@ -33,27 +40,32 @@ class PersonServiceImplTest {
         Person person = new Person();
         person.setFirstName("test");
         person.setLastName("test");
+        person.setEmail("test@gmail.com");
         person.setPhoneNumber("+38093");
         person.setUsername("test");
         person.setPassword("test");
         when(personRepository.save(person)).thenReturn(person);
-        personService.addPerson(person.getFirstName(), person.getLastName(), person.getPhoneNumber(),
+        personService.addPerson(person.getFirstName(), person.getLastName(), person.getEmail(), person.getPhoneNumber(),
                 person.getUsername(), person.getPassword());
         verify(personRepository, times(1)).save(any(Person.class));
     }
 
-    @Test
-    void addPersonMustThrowNullPointerException() {
-        assertThrows(NullPointerException.class, () -> personService.addPerson(null, "test",
+    @ParameterizedTest
+    @MethodSource("invalidInputsSource")
+    void addPersonMustThrowNullPointerException(String firstName, String lastName, String email, String phoneNumber,
+                                                String username, String password) {
+        assertThrows(NullPointerException.class, () -> personService.addPerson(firstName, lastName, email,
+                phoneNumber, username, password));
+    }
+
+    private static Stream<Arguments> invalidInputsSource() {
+        return Stream.of(Arguments.of(null, "test", "test@gmail.com",
+                "2464", "test", "test"), Arguments.of("test", null, "test@gmail.com",
+                "2464", "test", "test"), Arguments.of("test", "test", "test@gmail.com",
+                null, "test", "test"), Arguments.of("test", "test", "test@gmail.com",
+                "2464", null, "test"), Arguments.of("test", "test", "test@gmail.com",
+                "2464", "test", null), Arguments.of("test", "test", null,
                 "2464", "test", "test"));
-        assertThrows(NullPointerException.class, () -> personService.addPerson("test", null,
-                "2464", "test", "test"));
-        assertThrows(NullPointerException.class, () -> personService.addPerson("test", "test",
-                null, "test", "test"));
-        assertThrows(NullPointerException.class, () -> personService.addPerson("test", "test",
-                "2464", null, "test"));
-        assertThrows(NullPointerException.class, () -> personService.addPerson("test", "test",
-                "2464", "test", null));
     }
 
     @Test
@@ -160,6 +172,28 @@ class PersonServiceImplTest {
     void updatePersonLastNameMustThrowNotFoundException() {
         when(personRepository.findPersonByUsername("test")).thenReturn(null);
         assertThrows(NotFoundException.class, () -> personService.updatePersonLastNameByUsername("test", "Tom"));
+    }
+
+    @Test
+    void updatePersonEmailByUsernameSuccess() {
+        Person person = new Person();
+        person.setUsername("success");
+        when(personRepository.findPersonByUsername("success")).thenReturn(person);
+        personService.updatePersonEmailByUsername("success", "test");
+        verify(personRepository, times(1)).updatePersonEmailByUsername("success", "test");
+    }
+
+    @Test
+    void updatePersonEmailMustThrowNullPointerException() {
+        assertThrows(NullPointerException.class, () -> personService.updatePersonEmailByUsername("test", null));
+        assertThrows(NullPointerException.class, () -> personService.updatePersonEmailByUsername(null, "test"));
+        assertThrows(NullPointerException.class, () -> personService.updatePersonEmailByUsername(null, null));
+    }
+
+    @Test
+    void updatePersonEmailMustThrowNotFoundException() {
+        when(personRepository.findPersonByUsername("test")).thenReturn(null);
+        assertThrows(NotFoundException.class, () -> personService.updatePersonEmailByUsername("test", "test@gmail.com"));
     }
 
     @Test

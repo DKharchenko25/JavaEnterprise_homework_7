@@ -30,6 +30,8 @@
         <form:input required="required" path="firstName"/><br/>
         <form:label path="lastName">Last Name:</form:label>
         <form:input required="required" path="lastName"/><br/>
+        <form:label path="email">E-mail:</form:label>
+        <form:input required="required" path="email"/><br/>
         <form:label path="phoneNumber">Phone Number:</form:label>
         <form:input required="required" path="phoneNumber"/><br/>
         <form:label path="username">Username:</form:label>
