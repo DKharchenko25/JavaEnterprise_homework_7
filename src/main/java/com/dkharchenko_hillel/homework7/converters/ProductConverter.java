@@ -13,14 +13,4 @@ public class ProductConverter {
         productDto.setShopId(product.getShop().getId());
         return productDto;
     }
-
-    public static Product convertProductDtoToProduct(ProductDto productDto) {
-        Product product = new Product();
-        product.setId(productDto.getId());
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setShop(productDto.getShop());
-        return product;
-    }
-
 }

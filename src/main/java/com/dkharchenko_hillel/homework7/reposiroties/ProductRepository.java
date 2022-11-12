@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
     @Modifying
@@ -14,5 +16,5 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
     @Modifying
     @Query("update Product set price = ?2 where id = ?1")
-    Integer updateProductSumById(Long id, Double price);
+    Integer updateProductPriceById(Long id, BigDecimal price);
 }

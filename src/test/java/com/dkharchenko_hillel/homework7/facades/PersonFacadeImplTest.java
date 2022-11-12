@@ -44,11 +44,10 @@ class PersonFacadeImplTest {
         personDto.setPhoneNumber("+38097");
         personDto.setUsername("success");
         personDto.setPassword("success");
-        doNothing().when(personService).addPerson(personDto.getFirstName(), personDto.getLastName(), personDto.getEmail(),
-                personDto.getPhoneNumber(), personDto.getUsername(), personDto.getPassword());
+        Person person = PersonConverter.convertPersonDtoToPerson(personDto);
+        doNothing().when(personService).addPerson(person);
         personFacade.addPerson(personDto);
-        verify(personService, times(1)).addPerson(personDto.getFirstName(), personDto.getLastName(),
-                personDto.getEmail(), personDto.getPhoneNumber(), personDto.getUsername(), personDto.getPassword());
+        verify(personService, times(1)).addPerson(any(Person.class));
     }
 
     @Test

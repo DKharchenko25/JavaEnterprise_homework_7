@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dkharchenko_hillel.homework7.facades.InputValidator.checkName;
+import static com.dkharchenko_hillel.homework7.validators.InputValidator.checkName;
 
 @Slf4j
 @Component

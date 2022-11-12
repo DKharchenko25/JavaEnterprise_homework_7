@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.dkharchenko_hillel.homework7.converters.PersonConverter.convertPersonDtoToPerson;
 import static com.dkharchenko_hillel.homework7.converters.PersonConverter.convertPersonToPersonDto;
-import static com.dkharchenko_hillel.homework7.facades.InputValidator.*;
+import static com.dkharchenko_hillel.homework7.validators.InputValidator.*;
 
 @Slf4j
 @Component
@@ -25,8 +26,11 @@ public class PersonFacadeImpl implements PersonFacade {
 
     @Override
     public void addPerson(@NonNull PersonDto dto) {
-        personService.addPerson(checkName(dto.getFirstName()), checkName(dto.getLastName()), checkEmail(dto.getEmail()),
-                checkNumber(dto.getPhoneNumber()), dto.getUsername(), dto.getPassword());
+        dto.setFirstName(checkName(dto.getFirstName()));
+        dto.setLastName(checkName(dto.getLastName()));
+        dto.setEmail(checkEmail(dto.getEmail()));
+        dto.setPhoneNumber(checkNumber(dto.getPhoneNumber()));
+        personService.addPerson(convertPersonDtoToPerson(dto));
     }
 
     @Override

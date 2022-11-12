@@ -124,14 +124,14 @@ public class CartServiceImpl implements CartService {
 
     private void increaseAmountAndSum(Cart cart, Product product) {
         cart.setAmountOfProducts(cart.getAmountOfProducts() + 1);
-        cart.setSum(cart.getSum().add(BigDecimal.valueOf(product.getPrice())));
+        cart.setSum(cart.getSum().add(product.getPrice()));
     }
 
     private void decreaseAmountAndSum(Cart cart, Product product) {
         if (cart.getSum().compareTo(new BigDecimal("0.00")) != 0
                 && cart.getAmountOfProducts().compareTo(0) != 0) {
             cart.setAmountOfProducts(cart.getAmountOfProducts() - 1);
-            cart.setSum(cart.getSum().subtract(BigDecimal.valueOf(product.getPrice())));
+            cart.setSum(cart.getSum().subtract(product.getPrice()));
         } else {
             cart.setSum(new BigDecimal("0.00"));
             cart.setAmountOfProducts(0);

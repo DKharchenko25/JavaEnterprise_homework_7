@@ -11,12 +11,4 @@ public class ShopConverter {
         shopDto.setProducts(shop.getProducts());
         return shopDto;
     }
-
-    public static Shop convertShopDtoToShop(ShopDto shopDto) {
-        Shop shop = new Shop();
-        shop.setId(shopDto.getId());
-        shop.setName(shopDto.getName());
-        shop.setProducts(shopDto.getProducts());
-        return shop;
-    }
 }

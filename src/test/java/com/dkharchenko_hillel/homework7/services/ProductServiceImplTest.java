@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,29 +37,31 @@ class ProductServiceImplTest {
     void addProductSuccess() {
         Shop shop = new Shop("test");
         when(shopService.getShopById(2L)).thenReturn(shop);
-        productService.addProduct("test", 20.0, 2L);
+        productService.addProduct("test", new BigDecimal("20.0"), 2L);
         verify(productRepository, times(1)).save(any(Product.class));
         assertFalse(shop.getProducts().isEmpty());
     }
 
     @Test
     void addProductMustThrowNullPointerException() {
-        assertThrows(NullPointerException.class, () -> productService.addProduct(null, 20.0, 1L));
+        assertThrows(NullPointerException.class, () -> productService.addProduct(null, new BigDecimal("20.0"), 1L));
         assertThrows(NullPointerException.class, () -> productService.addProduct("test", null, 1L));
-        assertThrows(NullPointerException.class, () -> productService.addProduct("test", 20.0, null));
+        assertThrows(NullPointerException.class, () -> productService.addProduct("test", new BigDecimal("20.0"), null));
         assertThrows(NullPointerException.class, () -> productService.addProduct(null, null, null));
     }
 
     @Test
     void addProductMustThrowNotFoundException() {
         when(shopService.getShopById(1L)).thenThrow(NotFoundException.class);
-        assertThrows(NotFoundException.class, () -> productService.addProduct("test", 20.0, 1L));
+        assertThrows(NotFoundException.class, () -> productService.addProduct("test", new BigDecimal("20.0"), 1L));
     }
 
     @Test
     void removeProductByIdSuccess() {
         Shop shop = new Shop("test");
+        shop.setId(3L);
         Product product = new Product();
+        product.setShop(shop);
         when(shopService.getShopById(3L)).thenReturn(shop);
         when(productRepository.existsById(3L)).thenReturn(true);
         when(productRepository.findById(3L)).thenReturn(Optional.of(product));
@@ -128,13 +131,13 @@ class ProductServiceImplTest {
     @Test
     void updateProductPriceByIdSuccess() {
         when(productRepository.existsById(2L)).thenReturn(true);
-        productService.updateProductPriceById(2L, 20.0);
-        verify(productRepository, times(1)).updateProductSumById(2L, 20.0);
+        productService.updateProductPriceById(2L, new BigDecimal("20.0"));
+        verify(productRepository, times(1)).updateProductPriceById(2L, new BigDecimal("20.0"));
     }
 
     @Test
     void updateProductPriceMustThrowNullPointerException() {
-        assertThrows(NullPointerException.class, () -> productService.updateProductPriceById(null, 20.0));
+        assertThrows(NullPointerException.class, () -> productService.updateProductPriceById(null, new BigDecimal("20.0")));
         assertThrows(NullPointerException.class, () -> productService.updateProductPriceById(1L, null));
         assertThrows(NullPointerException.class, () -> productService.updateProductPriceById(null, null));
     }
@@ -142,6 +145,6 @@ class ProductServiceImplTest {
     @Test
     void updateProductPriceMustThrowNotFoundException() {
         when(productRepository.existsById(1L)).thenReturn(false);
-        assertThrows(NotFoundException.class, () -> productService.updateProductPriceById(1L, 20.0));
+        assertThrows(NotFoundException.class, () -> productService.updateProductPriceById(1L, new BigDecimal("20.0")));
     }
 }

@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -21,8 +22,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(@NonNull String name, @NonNull Double price, @NonNull Long shopId) {
-        Product product = new Product(name, price);
+    public void addProduct(@NonNull String name, @NonNull BigDecimal price, @NonNull Long shopId) {
+        Product product = new Product();
+        product.setName(name);
+        product.setPrice(price);
         product.setShop(shopService.getShopById(shopId));
         shopService.getShopById(shopId).getProducts().add(product);
         productRepository.save(product);
@@ -31,8 +34,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void removeProductById(@NonNull Long id) {
         if (productRepository.existsById(id)) {
-            shopService.getShopById(id).getProducts()
-                    .remove(productRepository.findById(id).orElseThrow(IllegalArgumentException::new));
+            Product product = productRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+            shopService.getShopById(product.getShop().getId()).getProducts()
+                    .remove(product);
             productRepository.deleteById(id);
         } else {
             log.error(getExceptionMessage(id));
@@ -66,9 +70,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProductPriceById(@NonNull Long id, @NonNull Double price) {
+    public void updateProductPriceById(@NonNull Long id, @NonNull BigDecimal price) {
         if (productRepository.existsById(id)) {
-            productRepository.updateProductSumById(id, price);
+            productRepository.updateProductPriceById(id, price);
         } else {
             log.error(getExceptionMessage(id));
             throw new NotFoundException(getExceptionMessage(id));

@@ -134,12 +134,12 @@ class CartServiceImplTest {
         cart.setId(2L);
         Product product = new Product();
         product.setId(2L);
-        product.setPrice(20.0);
+        product.setPrice(new BigDecimal("20.0"));
         when(cartRepository.findById(cart.getId())).thenReturn(Optional.of(cart));
         when(productService.getProductById(product.getId())).thenReturn(product);
         cartService.addProductByProductId(cart.getId(), product.getId());
         assertTrue(cart.getProducts().contains(product));
-        assertEquals(0, cart.getSum().compareTo(BigDecimal.valueOf(product.getPrice())));
+        assertEquals(0, cart.getSum().compareTo(product.getPrice()));
     }
 
     @Test
@@ -167,7 +167,7 @@ class CartServiceImplTest {
         cart.setId(3L);
         Product product = new Product();
         product.setId(3L);
-        product.setPrice(20.0);
+        product.setPrice(new BigDecimal("20.0"));
         cart.getProducts().add(product);
         when(cartRepository.findById(cart.getId())).thenReturn(Optional.of(cart));
         when(productService.getProductById(product.getId())).thenReturn(product);

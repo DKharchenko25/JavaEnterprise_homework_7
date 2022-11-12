@@ -31,22 +31,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void addPerson(@NonNull String firstName, @NonNull String lastName, @NonNull String email,
-                          @NonNull String phoneNumber, @NonNull String username, @NonNull String password) {
-        Person newPerson = new Person();
-        newPerson.setFirstName(firstName);
-        newPerson.setLastName(lastName);
-        newPerson.setEmail(email);
-        newPerson.setPhoneNumber(phoneNumber);
-        newPerson.setUsername(username);
-        newPerson.setPassword(bCryptPasswordEncoder.encode(password));
-        if (newPerson.getUsername().contains("admin")) {
-            newPerson.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
+    public void addPerson(@NonNull Person person) {
+        person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
+        if (person.getUsername().contains("admin")) {
+            person.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
         } else {
-            newPerson.setRoles(Collections.singleton(new Role(1L, "ROLE_CUSTOMER")));
+            person.setRoles(Collections.singleton(new Role(1L, "ROLE_CUSTOMER")));
         }
-        personRepository.save(newPerson);
-        emailService.sendRegistrationEmail(newPerson);
+        Person newPerson = personRepository.save(person);
+        if (personRepository.existsById(newPerson.getId())) {
+            emailService.sendRegistrationEmail(person);
+        }
     }
 
     @Override

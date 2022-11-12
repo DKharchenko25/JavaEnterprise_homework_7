@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,11 +39,11 @@ class ProductFacadeImplTest {
     void addProductSuccess() {
         ProductDto productDto = new ProductDto();
         productDto.setName("success");
-        productDto.setPrice(30.25);
+        productDto.setPrice(new BigDecimal("20.0"));
         productDto.setShopId(1L);
-        doNothing().when(productService).addProduct("success", 30.25, 1L);
+        doNothing().when(productService).addProduct("success", new BigDecimal("20.0"), 1L);
         productFacade.addProduct(productDto);
-        verify(productService, times(1)).addProduct("success", 30.25, 1L);
+        verify(productService, times(1)).addProduct("success", new BigDecimal("20.0"), 1L);
     }
 
     @Test
@@ -55,7 +56,7 @@ class ProductFacadeImplTest {
     void addProductMustThrowIllegalArgumentException(String name) {
         ProductDto productDto = new ProductDto();
         productDto.setName(name);
-        productDto.setPrice(20.0);
+        productDto.setPrice(new BigDecimal("20.0"));
         productDto.setShopId(1L);
         assertThrows(IllegalArgumentException.class, () -> productFacade.addProduct(productDto));
 
@@ -133,10 +134,10 @@ class ProductFacadeImplTest {
     void updateProductPriceSuccess() {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
-        productDto.setPrice(250.43);
-        doNothing().when(productService).updateProductPriceById(1L, 250.43);
+        productDto.setPrice(new BigDecimal("20.0"));
+        doNothing().when(productService).updateProductPriceById(1L, new BigDecimal("20.0"));
         productFacade.updateProductPrice(productDto);
-        verify(productService, times(1)).updateProductPriceById(1L, 250.43);
+        verify(productService, times(1)).updateProductPriceById(1L, new BigDecimal("20.0"));
     }
 
     @Test
@@ -148,8 +149,8 @@ class ProductFacadeImplTest {
     void updateProductPriceMustThrowNotFoundException() {
         ProductDto productDto = new ProductDto();
         productDto.setId(2L);
-        productDto.setPrice(30.0);
-        doThrow(NotFoundException.class).when(productService).updateProductPriceById(2L, 30.0);
+        productDto.setPrice(new BigDecimal("20.0"));
+        doThrow(NotFoundException.class).when(productService).updateProductPriceById(2L, new BigDecimal("20.0"));
         assertThrows(NotFoundException.class, () -> productFacade.updateProductPrice(productDto));
     }
 }

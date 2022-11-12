@@ -12,6 +12,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -43,7 +45,7 @@ class ProductControllerTest {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setName("test");
-        productDto.setPrice(20.0);
+        productDto.setPrice(new BigDecimal("20.0"));
         productDto.setShopId(1L);
         doNothing().when(productFacade).addProduct(productDto);
         mockMvc.perform(post("/add_product", productDto))
@@ -119,7 +121,7 @@ class ProductControllerTest {
     void updateProductPriceById() throws Exception {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
-        productDto.setPrice(20.0);
+        productDto.setPrice(new BigDecimal("20.0"));
         doNothing().when(productFacade).updateProductName(productDto);
         mockMvc.perform(put("/update_price", productDto))
                 .andExpect(status().isOk())

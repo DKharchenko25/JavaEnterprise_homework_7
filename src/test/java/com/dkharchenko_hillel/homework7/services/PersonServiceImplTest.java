@@ -45,8 +45,7 @@ class PersonServiceImplTest {
         person.setUsername("test");
         person.setPassword("test");
         when(personRepository.save(person)).thenReturn(person);
-        personService.addPerson(person.getFirstName(), person.getLastName(), person.getEmail(), person.getPhoneNumber(),
-                person.getUsername(), person.getPassword());
+        personService.addPerson(person);
         verify(personRepository, times(1)).save(any(Person.class));
     }
 
@@ -54,8 +53,14 @@ class PersonServiceImplTest {
     @MethodSource("invalidInputsSource")
     void addPersonMustThrowNullPointerException(String firstName, String lastName, String email, String phoneNumber,
                                                 String username, String password) {
-        assertThrows(NullPointerException.class, () -> personService.addPerson(firstName, lastName, email,
-                phoneNumber, username, password));
+        Person person = new Person();
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        person.setEmail(email);
+        person.setPhoneNumber(phoneNumber);
+        person.setUsername(username);
+        person.setPassword(password);
+        assertThrows(NullPointerException.class, () -> personService.addPerson(person));
     }
 
     private static Stream<Arguments> invalidInputsSource() {
@@ -63,8 +68,7 @@ class PersonServiceImplTest {
                 "2464", "test", "test"), Arguments.of("test", null, "test@gmail.com",
                 "2464", "test", "test"), Arguments.of("test", "test", "test@gmail.com",
                 null, "test", "test"), Arguments.of("test", "test", "test@gmail.com",
-                "2464", null, "test"), Arguments.of("test", "test", "test@gmail.com",
-                "2464", "test", null), Arguments.of("test", "test", null,
+                "2464", null, "test"), Arguments.of("test", "test", null,
                 "2464", "test", "test"));
     }
 
