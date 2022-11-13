@@ -3,6 +3,11 @@
 
 ### Path: ```localhost:8080```
 
+### Used technologies:
+ - Java 8;
+ - Spring (Web, Data, Security);
+ - JSP;
+
 ### Test logins and passwords for access:
 
 1. Admin account:
