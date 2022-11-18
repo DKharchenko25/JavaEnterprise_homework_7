@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InputValidator {
 
     public static String checkName(String name) {
-        if (name.matches("[A-Za-zА-Яа-я\\d\\-]+")) {
+        if (name.matches("[A-Za-zА-Яа-я\\d\\-\\s]+")) {
             return name;
         } else {
             log.error("Name is invalid: {}", name);

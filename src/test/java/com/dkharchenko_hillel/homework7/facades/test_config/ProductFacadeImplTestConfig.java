@@ -1,6 +1,7 @@
 package com.dkharchenko_hillel.homework7.facades.test_config;
 
 
+import com.dkharchenko_hillel.homework7.converters.PriceConverter;
 import com.dkharchenko_hillel.homework7.facades.ProductFacade;
 import com.dkharchenko_hillel.homework7.facades.ProductFacadeImpl;
 import com.dkharchenko_hillel.homework7.services.ProductService;
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 public class ProductFacadeImplTestConfig {
 
     @Bean
-    public ProductFacade productFacade(ProductService productService) {
-        return new ProductFacadeImpl(productService);
+    public ProductFacade productFacade(ProductService productService, PriceConverter priceConverter) {
+        return new ProductFacadeImpl(productService, priceConverter);
     }
 }

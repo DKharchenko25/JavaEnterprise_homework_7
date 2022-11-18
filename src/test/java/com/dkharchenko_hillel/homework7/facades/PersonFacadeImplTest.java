@@ -151,7 +151,7 @@ class PersonFacadeImplTest {
     }
 
     private static Stream<String> invalidNameSource() {
-        return Stream.of("", " ", "??!", "--__");
+        return Stream.of("", "??!", "--__");
     }
 
     @Test

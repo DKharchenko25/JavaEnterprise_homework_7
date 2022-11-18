@@ -15,14 +15,16 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Price</th>
+            <th>Price (UAH)</th>
+            <th>Price (USD)</th>
             <th>Shop ID</th>
         </tr>
         <c:forEach  items="${all}" var ="product">
             <tr>
                 <td>${product.id}</td>
                 <td>${product.name}</td>
-                <td>${product.price}</td>
+                <td>${product.priceInUah}</td>
+                <td>${product.priceInUsd}</td>
                 <td>${product.shopId}</td>
             </tr>
         </c:forEach>

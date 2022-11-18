@@ -1,3 +1,0 @@
-2022-10-06 18:30:26 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "update person_roles set person_roles.roles_id = roles.id [*]from person_roles inner join on person_roles.roles_id where person_roles.person_id=4"; SQL statement:
-update person_roles set person_roles.roles_id = roles.id from person_roles inner join on person_roles.roles_id where person_roles.person_id=4 [42000-214]

@@ -12,7 +12,8 @@ public class ProductDto {
     private Long id;
     private Shop shop;
     private String name;
-    private BigDecimal price;
+    private BigDecimal priceInUah;
+    private BigDecimal priceInUsd;
     private Long shopId;
     private Long cartId;
 }

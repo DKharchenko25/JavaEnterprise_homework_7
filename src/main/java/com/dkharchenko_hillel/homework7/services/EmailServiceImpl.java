@@ -27,7 +27,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setText("<h3>Dear, " + person.getFirstName() + "!</h3><br>" +
                     "<h3>You've successfully completed registration for OnlineShop!</h3><br>" +
                     "<i><h4>Follow the link to log in and start shopping:</h4></i> " +
-                    "<a href=\"http://localhost:8080/login\" target=\"_blank\">Log in</a>", true);
+                    "<a href=\"http://localhost:8081/login\" target=\"_blank\">Log in</a>", true);
             javaMailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);

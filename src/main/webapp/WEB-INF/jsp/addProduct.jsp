@@ -30,8 +30,8 @@
         <form:label path="name">Name:</form:label>
         <form:input required="required" path="name"/><br/>
 
-        <form:label path="price">Price:</form:label>
-        <form:input required="required" path="price"/><br/>
+        <form:label path="priceInUah">Price:</form:label>
+        <form:input required="required" path="priceInUah"/><br/>
 
         <form:label path="shopId">Shop ID:</form:label>
         <form:input required="required" path="shopId"/><br/>

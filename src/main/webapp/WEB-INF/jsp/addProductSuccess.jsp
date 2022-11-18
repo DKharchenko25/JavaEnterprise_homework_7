@@ -17,7 +17,7 @@
 <div align="center">
     <h2>Addition Succeeded!</h2>
     <span>Name:</span><span>${product.name}</span><br/>
-    <span>Price:</span><span>${product.price}</span><br/>
+    <span>Price:</span><span>${product.priceInUah}</span><br/>
 </div>
 <br>
 <a href="${pageContext.request.contextPath}/add_product">Add product</a><br>

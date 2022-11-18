@@ -30,7 +30,7 @@ public class ProductController {
     @RequestMapping(value = "/add_product", method = RequestMethod.POST)
     public String addProduct(@ModelAttribute("product") ProductDto productDto) {
         productFacade.addProduct(productDto);
-        log.info("New product is added to products table: {}, {}", productDto.getName(), productDto.getPrice());
+        log.info("New product is added to products table: {}, {}", productDto.getName(), productDto.getPriceInUah());
         return "addProductSuccess";
     }
 

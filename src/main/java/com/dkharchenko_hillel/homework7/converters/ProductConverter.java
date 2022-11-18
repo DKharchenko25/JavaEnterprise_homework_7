@@ -8,7 +8,7 @@ public class ProductConverter {
         ProductDto productDto = new ProductDto();
         productDto.setId(product.getId());
         productDto.setName(product.getName());
-        productDto.setPrice(product.getPrice());
+        productDto.setPriceInUah(product.getPrice());
         productDto.setShop(product.getShop());
         productDto.setShopId(product.getShop().getId());
         return productDto;

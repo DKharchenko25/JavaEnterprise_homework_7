@@ -58,7 +58,7 @@ class ShopFacadeImplTest {
     }
 
     private static Stream<String> invalidNamesSource() {
-        return Stream.of("", " ", "?--2", "(-+");
+        return Stream.of("", "?--2", "(-+");
     }
 
     @Test

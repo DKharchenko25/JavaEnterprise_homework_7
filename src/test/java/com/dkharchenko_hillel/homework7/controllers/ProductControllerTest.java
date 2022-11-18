@@ -45,7 +45,7 @@ class ProductControllerTest {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setName("test");
-        productDto.setPrice(new BigDecimal("20.0"));
+        productDto.setPriceInUah(new BigDecimal("20.0"));
         productDto.setShopId(1L);
         doNothing().when(productFacade).addProduct(productDto);
         mockMvc.perform(post("/add_product", productDto))
@@ -121,7 +121,7 @@ class ProductControllerTest {
     void updateProductPriceById() throws Exception {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
-        productDto.setPrice(new BigDecimal("20.0"));
+        productDto.setPriceInUah(new BigDecimal("20.0"));
         doNothing().when(productFacade).updateProductName(productDto);
         mockMvc.perform(put("/update_price", productDto))
                 .andExpect(status().isOk())

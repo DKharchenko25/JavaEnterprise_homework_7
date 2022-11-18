@@ -1,5 +1,6 @@
 package com.dkharchenko_hillel.homework7.facades;
 
+import com.dkharchenko_hillel.homework7.converters.PriceConverter;
 import com.dkharchenko_hillel.homework7.converters.ProductConverter;
 import com.dkharchenko_hillel.homework7.dtos.ProductDto;
 import com.dkharchenko_hillel.homework7.services.ProductService;
@@ -18,13 +19,17 @@ public class ProductFacadeImpl implements ProductFacade {
 
     private final ProductService productService;
 
-    public ProductFacadeImpl(ProductService productService) {
+    private final PriceConverter priceConverter;
+
+
+    public ProductFacadeImpl(ProductService productService, PriceConverter priceConverter) {
         this.productService = productService;
+        this.priceConverter = priceConverter;
     }
 
     @Override
     public void addProduct(@NonNull ProductDto dto) {
-        productService.addProduct(checkName(dto.getName()), dto.getPrice(), dto.getShopId());
+        productService.addProduct(checkName(dto.getName()), dto.getPriceInUah(), dto.getShopId());
     }
 
     @Override
@@ -34,8 +39,12 @@ public class ProductFacadeImpl implements ProductFacade {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return productService.getAllProducts().stream().map(ProductConverter::convertProductToProductDto)
+        List<ProductDto> allProducts = productService.getAllProducts().stream()
+                .map(ProductConverter::convertProductToProductDto)
                 .collect(Collectors.toList());
+        allProducts.forEach(productDto -> productDto.setPriceInUsd(
+                priceConverter.getConvertedPrice(productDto.getPriceInUah())));
+        return allProducts;
     }
 
     @Override
@@ -45,6 +54,6 @@ public class ProductFacadeImpl implements ProductFacade {
 
     @Override
     public void updateProductPrice(@NonNull ProductDto dto) {
-        productService.updateProductPriceById(dto.getId(), dto.getPrice());
+        productService.updateProductPriceById(dto.getId(), dto.getPriceInUah());
     }
 }

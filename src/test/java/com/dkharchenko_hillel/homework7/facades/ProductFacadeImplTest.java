@@ -39,7 +39,7 @@ class ProductFacadeImplTest {
     void addProductSuccess() {
         ProductDto productDto = new ProductDto();
         productDto.setName("success");
-        productDto.setPrice(new BigDecimal("20.0"));
+        productDto.setPriceInUah(new BigDecimal("20.0"));
         productDto.setShopId(1L);
         doNothing().when(productService).addProduct("success", new BigDecimal("20.0"), 1L);
         productFacade.addProduct(productDto);
@@ -56,19 +56,19 @@ class ProductFacadeImplTest {
     void addProductMustThrowIllegalArgumentException(String name) {
         ProductDto productDto = new ProductDto();
         productDto.setName(name);
-        productDto.setPrice(new BigDecimal("20.0"));
+        productDto.setPriceInUah(new BigDecimal("20.0"));
         productDto.setShopId(1L);
         assertThrows(IllegalArgumentException.class, () -> productFacade.addProduct(productDto));
 
         productDto.setName("fail");
         doThrow(NotFoundException.class).when(productService).addProduct(productDto.getName(),
-                productDto.getPrice(), productDto.getShopId());
+                productDto.getPriceInUah(), productDto.getShopId());
         assertThrows(NotFoundException.class, () -> productFacade.addProduct(productDto));
 
     }
 
     private static Stream<String> invalidInputsSource() {
-        return Stream.of("", " ", "--__", "??!");
+        return Stream.of("", "--__", "??!");
     }
 
     @Test
@@ -134,7 +134,7 @@ class ProductFacadeImplTest {
     void updateProductPriceSuccess() {
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
-        productDto.setPrice(new BigDecimal("20.0"));
+        productDto.setPriceInUah(new BigDecimal("20.0"));
         doNothing().when(productService).updateProductPriceById(1L, new BigDecimal("20.0"));
         productFacade.updateProductPrice(productDto);
         verify(productService, times(1)).updateProductPriceById(1L, new BigDecimal("20.0"));
@@ -149,7 +149,7 @@ class ProductFacadeImplTest {
     void updateProductPriceMustThrowNotFoundException() {
         ProductDto productDto = new ProductDto();
         productDto.setId(2L);
-        productDto.setPrice(new BigDecimal("20.0"));
+        productDto.setPriceInUah(new BigDecimal("20.0"));
         doThrow(NotFoundException.class).when(productService).updateProductPriceById(2L, new BigDecimal("20.0"));
         assertThrows(NotFoundException.class, () -> productFacade.updateProductPrice(productDto));
     }
