@@ -19,3 +19,14 @@
 
 - login: ```customer```;
 - password: ```1111```;
+
+### Instructions for Docker:
+
+1. Build project with mvn ```mvn verify``` command;
+2. Run docker compose with ```docker-compose up``` command;
+3. Insert initial data to postgres database:
+- open terminal in postgres container and execute ```psql --host=database --username=postgres```
+- insert password ```1111```
+- copy and execute sql queries ```INSERT INTO role (id, name) VALUES (DEFAULT, 'ROLE_CUSTOMER');``` and ```INSERT INTO role (id, name) VALUES (DEFAULT, 'ROLE_ADMIN');```
+4. Open browser and use application with http://localhost:8081;
+5. Register administrator with username that contains word ```admin``` and that's it.
